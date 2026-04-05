@@ -1,0 +1,11 @@
+[
+  {
+    "ticker": "AAPL",
+    "active": true,
+    "dollar_amount": 5000,
+    "timeframe": "1H",
+    "indicator_params": {},
+    "order_type": "market",
+    "state": "flat"
+  }
+]
