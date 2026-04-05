@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 from engine.broker.connection import IBKRConnection
-import os
 
 router = APIRouter()
 
@@ -20,16 +19,28 @@ def list_positions():
     if not broker.is_connected:
         return []
 
-    raw = broker.get_positions()
     result = []
-    for ticker, pos in raw.items():
-        bid, ask = broker.get_bid_ask(ticker)
-        current_price = ask or bid or 0
-        entry_price = 0  # IBKR avgCost available via ib.positions()
-        result.append({
-            "ticker": ticker,
-            "side": pos["side"],
-            "qty": pos["qty"],
-            "current_price": current_price,
-        })
+    try:
+        for p in broker.ib.positions():
+            symbol = p.contract.symbol
+            qty = int(p.position)
+            if qty == 0:
+                continue
+            side = "long" if qty > 0 else "short"
+            avg_cost = round(float(p.avgCost), 2)
+            bid, ask = broker.get_bid_ask(symbol)
+            current_price = round(ask or bid or 0, 2)
+            invested = round(abs(qty) * avg_cost, 2)
+            unrealised_pnl = round((current_price - avg_cost) * abs(qty) * (1 if side == "long" else -1), 2)
+            result.append({
+                "ticker": symbol,
+                "side": side,
+                "qty": abs(qty),
+                "entry_price": avg_cost,
+                "current_price": current_price,
+                "invested": invested,
+                "unrealised_pnl": unrealised_pnl,
+            })
+    except Exception as e:
+        return []
     return result

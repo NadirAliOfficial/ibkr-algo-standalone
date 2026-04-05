@@ -22,3 +22,10 @@ def trade_log():
     if not _runner:
         return []
     return list(reversed(_runner.trade_log[-100:]))
+
+
+@router.get("/earnings")
+def earnings_log():
+    if not _runner:
+        return []
+    return list(reversed(_runner.earnings_log[-100:]))

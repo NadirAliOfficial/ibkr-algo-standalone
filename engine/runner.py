@@ -8,12 +8,12 @@ Cycle per timeframe candle close:
 4. Log results
 
 Earnings daily scan runs once per day at market open.
+Market hours: US Eastern 9:30–16:00, Monday–Friday only.
 """
 
 import logging
 import time
-import threading
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import Dict, Optional
 
 from config.store import ConfigStore
@@ -24,6 +24,7 @@ from engine.algo.state_machine import PositionStateMachine
 from engine.algo.earnings_filter import EarningsFilter
 from engine.algo.signal_processor import SignalProcessor
 from indicator.base import BaseIndicator
+from indicator.erga_indicator import ERGAIndicator
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +38,19 @@ TIMEFRAME_SECONDS = {
     "4H": 14400,
     "1D": 86400,
 }
+
+# US Eastern offset (approximate: EDT=-4, EST=-5)
+def _utc_to_et(utc_dt: datetime) -> datetime:
+    offset = -4 if 3 <= utc_dt.month <= 11 else -5
+    return utc_dt + timedelta(hours=offset)
+
+def _is_market_hours(utc_now: datetime) -> bool:
+    et = _utc_to_et(utc_now)
+    if et.weekday() >= 5:  # Saturday=5, Sunday=6
+        return False
+    t = et.time()
+    from datetime import time as dtime
+    return dtime(9, 30) <= t <= dtime(16, 0)
 
 
 class AlgoRunner:
@@ -70,21 +84,24 @@ class AlgoRunner:
         # ticker -> indicator instance
         self._indicators: Dict[str, BaseIndicator] = {}
         self._running = False
-        self._last_eval: Dict[str, float] = {}  # ticker -> last eval timestamp
+        self._last_eval: Dict[str, float] = {}       # ticker -> last eval unix timestamp
+        self._last_timeframe: Dict[str, str] = {}    # ticker -> last known timeframe
         self._last_earnings_scan: Optional[datetime] = None
 
-        # Trade + signal logs (kept in memory; dashboard reads from here)
+        # Logs — dashboard reads these
         self.signal_log: list = []
         self.trade_log: list = []
+        self.earnings_log: list = []
 
     def register_indicator(self, ticker: str, indicator: BaseIndicator):
         self._indicators[ticker] = indicator
         logger.info(f"Registered indicator for {ticker}")
 
     def reinit_indicator(self, ticker: str, indicator: BaseIndicator):
-        """Hot-swap indicator instance — called when config changes for a ticker."""
+        """Hot-swap indicator instance."""
         self._indicators[ticker] = indicator
         self._last_eval.pop(ticker, None)
+        self._last_timeframe.pop(ticker, None)
         logger.info(f"{ticker}: indicator re-initialised")
 
     def start(self):
@@ -112,11 +129,11 @@ class AlgoRunner:
         now = time.time()
         now_dt = datetime.now(timezone.utc)
 
-        # Earnings daily scan — once per day ~9:00 UTC
+        # Earnings daily scan — once per day at market open (~14:30 UTC)
         if (
             self._last_earnings_scan is None
-            or (now_dt - self._last_earnings_scan).seconds > 86400
-        ) and now_dt.hour == 9:
+            or (now_dt - self._last_earnings_scan).total_seconds() > 86400
+        ) and now_dt.hour == 14 and now_dt.minute == 30:
             self.earnings_filter.daily_scan()
             self._last_earnings_scan = now_dt
 
@@ -125,6 +142,10 @@ class AlgoRunner:
             logger.warning("Connection lost — attempting reconnect")
             if self.broker.reconnect():
                 self.state.sync_from_ibkr()
+
+        # Market hours gate — skip signal evaluation outside US market hours
+        if not _is_market_hours(now_dt):
+            return
 
         for cfg in self.store.get_active():
             ticker = cfg.ticker
@@ -140,11 +161,21 @@ class AlgoRunner:
 
     def _eval_ticker(self, ticker: str, cfg):
         indicator = self._indicators.get(ticker)
+
+        # Re-instantiate if timeframe changed (full reset needed)
+        prev_tf = self._last_timeframe.get(ticker)
+        if prev_tf and prev_tf != cfg.timeframe:
+            logger.info(f"{ticker}: timeframe changed {prev_tf} → {cfg.timeframe}, re-instantiating indicator")
+            indicator = ERGAIndicator(ticker, cfg.timeframe, cfg.indicator_params)
+            self.reinit_indicator(ticker, indicator)
+
+        self._last_timeframe[ticker] = cfg.timeframe
+
         if not indicator:
             logger.debug(f"{ticker}: no indicator registered — skipping")
             return
 
-        # Sync indicator params if they changed
+        # Hot-reload params if changed
         if indicator.params != cfg.indicator_params:
             indicator.update_params(cfg.indicator_params)
 
@@ -173,3 +204,15 @@ class AlgoRunner:
         self.trade_log.append(entry)
         if len(self.trade_log) > 200:
             self.trade_log = self.trade_log[-200:]
+
+    def append_earnings_log(self, ticker: str, action: str, earnings_date: str, pnl: float = 0):
+        entry = {
+            "timestamp": datetime.utcnow().isoformat(),
+            "ticker": ticker,
+            "earnings_date": earnings_date,
+            "action": action,
+            "pnl": pnl,
+        }
+        self.earnings_log.append(entry)
+        if len(self.earnings_log) > 100:
+            self.earnings_log = self.earnings_log[-100:]

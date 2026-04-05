@@ -19,3 +19,4 @@ export const getPositions = () => api.get("/positions/").then((r) => r.data);
 export const getSignalLog = () => api.get("/logs/signals").then((r) => r.data);
 export const getTradeLog = () => api.get("/logs/trades").then((r) => r.data);
 export const getStatus = () => api.get("/system/status").then((r) => r.data);
+export const getEarningsLog = () => api.get("/logs/earnings").then((r) => r.data);
