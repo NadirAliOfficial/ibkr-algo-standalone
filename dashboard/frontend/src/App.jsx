@@ -105,7 +105,8 @@ function WatchlistManager() {
 }
 
 function PositionsPanel() {
-  const { data: positions = [] } = useQuery({ queryKey: ["positions"], queryFn: getPositions, refetchInterval: 30000 });
+  const { data: raw_positions } = useQuery({ queryKey: ["positions"], queryFn: getPositions, refetchInterval: 30000 });
+  const positions = Array.isArray(raw_positions) ? raw_positions : [];
   return (
     <div className="p-4">
       <h2 className="text-lg font-semibold mb-3">Live Positions ({positions.length})</h2>

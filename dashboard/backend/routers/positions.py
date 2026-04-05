@@ -18,7 +18,7 @@ def get_broker() -> IBKRConnection:
 def list_positions():
     broker = get_broker()
     if not broker.is_connected:
-        return {"error": "not connected to IB Gateway", "positions": []}
+        return []
 
     raw = broker.get_positions()
     result = []

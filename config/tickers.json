@@ -1,0 +1,52 @@
+[
+  {
+    "ticker": "AAPL",
+    "active": true,
+    "dollar_amount": 5000.0,
+    "timeframe": "1H",
+    "indicator_params": {},
+    "order_type": "market",
+    "state": "flat",
+    "blocked": false
+  },
+  {
+    "ticker": "TSLA",
+    "active": true,
+    "dollar_amount": 5000.0,
+    "timeframe": "1H",
+    "indicator_params": {},
+    "order_type": "market",
+    "state": "flat",
+    "blocked": false
+  },
+  {
+    "ticker": "NVDA",
+    "active": true,
+    "dollar_amount": 5000.0,
+    "timeframe": "1H",
+    "indicator_params": {},
+    "order_type": "market",
+    "state": "flat",
+    "blocked": false
+  },
+  {
+    "ticker": "MSFT",
+    "active": true,
+    "dollar_amount": 5000.0,
+    "timeframe": "1H",
+    "indicator_params": {},
+    "order_type": "market",
+    "state": "flat",
+    "blocked": false
+  },
+  {
+    "ticker": "AMZN",
+    "active": true,
+    "dollar_amount": 5000.0,
+    "timeframe": "1H",
+    "indicator_params": {},
+    "order_type": "market",
+    "state": "flat",
+    "blocked": false
+  }
+]
