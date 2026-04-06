@@ -143,10 +143,10 @@ class ERGAIndicator(BaseIndicator):
     @staticmethod
     def _parse_tf(tf: str) -> int:
         tf = tf.strip().upper()
+        if tf == "1D":
+            return 1440
         if tf.endswith("H"):
             return int(tf[:-1]) * 60
         if tf.endswith("M"):
             return int(tf[:-1])
-        if tf == "1D":
-            return 1440
         return 60

@@ -18,6 +18,7 @@ TIMEFRAME_MAP = {
     "30m": ("30", "minute"),
     "1H":  ("1", "hour"),
     "2H":  ("2", "hour"),
+    "3H":  ("3", "hour"),
     "4H":  ("4", "hour"),
     "1D":  ("1", "day"),
 }

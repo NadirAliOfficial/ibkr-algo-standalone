@@ -6,7 +6,7 @@ import { getEarningsLog } from "./api";
 
 const qc = new QueryClient();
 
-const TIMEFRAMES = ["1m", "5m", "15m", "30m", "1H", "2H", "4H", "1D"];
+const TIMEFRAMES = ["1m", "5m", "15m", "30m", "1H", "2H", "3H", "4H", "1D"];
 const STATE_COLORS = { WAITING: "bg-gray-500", LONG: "bg-green-600", SHORT: "bg-red-600", BLOCKED: "bg-yellow-600" };
 
 function StatusBar() {
