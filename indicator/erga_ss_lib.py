@@ -2,10 +2,6 @@
 # erga_ss_lib.py  —  ERGA-SS Indicator Engine
 # Efficiency Ratio SuperSmoother Adaptive
 #
-# This library is the pure Python implementation of the ERGA-SS indicator.
-# It is completely independent of QuantConnect and can be used in any Python
-# environment — QuantConnect, standalone scripts, or direct IBKR connection.
-#
 # PIPELINE (6 stages):
 #   1. Pre-smooth  : SuperSmoother at pre_len bars strips micro-noise from source
 #   2. Eff. Ratio  : Calculated on raw price (not pre-smoothed) for genuine ER
@@ -14,25 +10,18 @@
 #   5. Regime Gate : ADX + normalised slope quality score gates signals
 #   6. State Machine: Hysteresis threshold + min trend duration lock
 #
-# UPDATES vs original version:
-#   - Minimum trend duration lock (post-flip bar lockout, default 3)
-#   - Volatility scaling: ATR ratio scales ER-derived length (optional, default off)
-#   - Vol scale clamp configurable (default ±30%)
-#   - er_len now properly wired through update_params
-#   - calc_mode "Manual Slow" and "Manual Fast" bypass ER + vol scaling correctly
+# VALIDATION FIXES vs original (Phase 1):
+#   - Price source: close → hlc3 = (high+low+close)/3, matches Pine Script default
+#   - Slope normalisation: stdev of ssLine (50 bars) matches Pine's ta.stdev(ssLine,50)
+#   - Threshold: stdev window 200→100 bars, matches Pine's ta.stdev(ssLine-ssLine[1],100)
+#   - State machine reordered to match Pine Script exactly (desired computed first)
 # =============================================================================
 
 import math
 from collections import deque
 
 
-# ---------------------------------------------------------------------------
-# Helper: running statistics over a fixed window
-# ---------------------------------------------------------------------------
-
 class _RollingStats:
-    """Maintains a rolling window for mean and stdev calculations."""
-
     def __init__(self, maxlen: int):
         self._buf = deque(maxlen=maxlen)
 
@@ -55,73 +44,55 @@ class _RollingStats:
         return len(self._buf)
 
 
-# ---------------------------------------------------------------------------
-# ERGA_SS  —  main indicator class
-# ---------------------------------------------------------------------------
-
 class ERGA_SS:
     """
     ERGA-SS: Efficiency Ratio SuperSmoother Adaptive indicator.
 
     Instantiate once per symbol and call update(close, high, low) on every bar.
-    Read .trend (1 = long, -1 = short), .bull_flip, .bear_flip after each update.
-
-    Parameters
-    ----------
-    slow_len     : int   — SS slow length (default 50)
-    fast_len     : int   — SS fast length (default 15)
-    er_len       : int   — Efficiency Ratio lookback (default 20)
-    pre_len      : int   — Pre-smooth SS length (default 5)
-    calc_mode    : str   — "Adaptive" | "Manual Slow" | "Manual Fast"
-    min_quality  : float — Regime gate threshold 0-100 (default 25)
-    hysteresis   : float — Slope stdev multiplier for flip threshold (default 0.1)
-    buffer_mult  : float — ATR multiplier for ride line buffer (default 0.5)
-    min_trend_bars: int  — Min bars between flips, 0 to disable (default 3)
-    use_vol_scale: bool  — Enable ATR-ratio volatility scaling (default False)
-    vol_clamp    : float — Max vol scale factor deviation from 1.0 (default 0.30)
-    adx_len      : int   — ADX calculation length (default 14)
+    Read .trend (1=long, -1=short), .bull_flip, .bear_flip after each update.
     """
 
     def __init__(
         self,
-        slow_len: int   = 50,
-        fast_len: int   = 15,
-        er_len: int     = 20,
-        pre_len: int    = 5,
-        calc_mode: str  = "Adaptive",
-        min_quality: float = 25.0,
-        hysteresis: float  = 0.1,
-        buffer_mult: float = 0.5,
+        slow_len: int       = 50,
+        fast_len: int       = 15,
+        er_len: int         = 20,
+        pre_len: int        = 5,
+        calc_mode: str      = "Adaptive",
+        min_quality: float  = 25.0,
+        hysteresis: float   = 0.1,
+        buffer_mult: float  = 0.5,
         min_trend_bars: int = 3,
         use_vol_scale: bool = False,
         vol_clamp: float    = 0.30,
         adx_len: int        = 14,
+        use_hlc3: bool      = True,  # True = matches Pine Script default source (hlc3)
     ):
-        self.slow_len      = max(10, slow_len)
-        self.fast_len      = max(3,  fast_len)
-        self.er_len        = max(2,  er_len)
-        self.pre_len       = max(2,  pre_len)
-        self.calc_mode     = calc_mode
-        self.min_quality   = min_quality
-        self.hysteresis    = hysteresis
-        self.buffer_mult   = buffer_mult
+        self.slow_len       = max(10, slow_len)
+        self.fast_len       = max(3,  fast_len)
+        self.er_len         = max(2,  er_len)
+        self.pre_len        = max(2,  pre_len)
+        self.calc_mode      = calc_mode
+        self.min_quality    = min_quality
+        self.hysteresis     = hysteresis
+        self.buffer_mult    = buffer_mult
         self.min_trend_bars = max(0, min_trend_bars)
-        self.use_vol_scale = use_vol_scale
-        self.vol_clamp     = max(0.0, vol_clamp)
-        self.adx_len       = max(2, adx_len)
+        self.use_vol_scale  = use_vol_scale
+        self.vol_clamp      = max(0.0, vol_clamp)
+        self.adx_len        = max(2, adx_len)
+        self.use_hlc3       = use_hlc3
 
-        # --- SuperSmoother state (2 poles each) ---
-        self._pre_ss1 = self._pre_ss2 = 0.0   # pre-smooth filter state
-        self._ss1     = self._ss2     = 0.0   # main filter state
+        self._pre_ss1 = self._pre_ss2 = 0.0
+        self._ss1     = self._ss2     = 0.0
 
-        # --- Rolling buffers ---
-        self._raw_buf  = deque(maxlen=max(slow_len + 1, er_len + 1, 200))
-        self._pre_buf  = deque(maxlen=max(slow_len + 1, 5))
-        self._ss_buf   = deque(maxlen=max(slow_len + 1, 200))
-        self._atr_buf  = deque(maxlen=100)           # ATR history for vol scaling
-        self._slope_stats = _RollingStats(200)        # slope stdev window
+        self._raw_buf     = deque(maxlen=max(slow_len + 1, er_len + 1, 200))
+        self._pre_buf     = deque(maxlen=max(slow_len + 1, 5))
+        self._ss_buf      = deque(maxlen=max(slow_len + 1, 200))
+        self._atr_buf     = deque(maxlen=100)
+        self._atr_sma_buf = deque(maxlen=100)
+        self._ssline_buf  = deque(maxlen=50)   # for stdev(ssLine, 50) — matches Pine
+        self._slope_stats = _RollingStats(100)  # for stdev(slope, 100) — matches Pine
 
-        # --- ATR/ADX state ---
         self._prev_close = None
         self._prev_high  = None
         self._prev_low   = None
@@ -129,127 +100,112 @@ class ERGA_SS:
         self._adx_smooth = 0.0
         self._plus_di    = 0.0
         self._minus_di   = 0.0
-        self._prev_atr   = 0.0
-        self._atr_sma_buf = deque(maxlen=100)        # long ATR SMA for vol ratio
 
-        # --- State machine ---
-        self.trend         = 1        # 1 = long, -1 = short
-        self.bull_flip     = False
-        self.bear_flip     = False
+        self.trend            = 1
+        self.bull_flip        = False
+        self.bear_flip        = False
         self._bars_since_flip = 0
 
-        # --- Outputs ---
-        self.ss_line     = 0.0
-        self.ride_line   = 0.0
-        self.er          = 0.0
-        self.quality     = 0.0
-        self.active_len  = slow_len
-        self.vol_factor  = 1.0
-        self._bars       = 0
-
-    # -----------------------------------------------------------------------
-    # Public API
-    # -----------------------------------------------------------------------
+        self.ss_line    = 0.0
+        self.ride_line  = 0.0
+        self.er         = 0.0
+        self.quality    = 0.0
+        self.active_len = slow_len
+        self.vol_factor = 1.0
+        self._bars      = 0
 
     def update(self, close: float, high: float, low: float) -> None:
-        """
-        Call on every completed bar (bar close).
-        After calling, read: .trend, .bull_flip, .bear_flip, .ss_line, .ride_line
-        """
+        """Call on every completed bar. Uses hlc3 as source (matches Pine Script)."""
         self._bars += 1
         self.bull_flip = False
         self.bear_flip = False
 
-        # ---- STAGE 1: Pre-smooth ----
-        raw = close
+        # Price source: hlc3 = (high + low + close) / 3  — Pine Script default
+        raw = (high + low + close) / 3.0 if self.use_hlc3 else close
+
+        # Stage 1: Pre-smooth
         self._raw_buf.append(raw)
         pre = self._supersmoother(raw, self.pre_len, "_pre")
         self._pre_buf.append(pre)
 
-        # ---- STAGE 2: Efficiency Ratio (on raw price) ----
+        # Stage 2: Efficiency Ratio on raw price
         self.er = self._efficiency_ratio(self._raw_buf, self.er_len)
 
-        # ---- ATR and ADX ----
+        # ATR + ADX
         atr = self._calc_atr(close, high, low)
         adx = self._calc_adx(close, high, low)
         self._atr_buf.append(atr)
         self._atr_sma_buf.append(atr)
 
-        # ---- STAGE 3: Adaptive length + optional vol scaling ----
+        # Stage 3: Adaptive length
         if self.calc_mode == "Manual Slow":
             er_len_val = self.slow_len
         elif self.calc_mode == "Manual Fast":
             er_len_val = self.fast_len
         else:
-            # Adaptive: ER blends fast <-> slow
             er_len_val = round(self.fast_len + (1.0 - self.er) * (self.slow_len - self.fast_len))
             er_len_val = max(self.fast_len, min(self.slow_len, er_len_val))
-
             if self.use_vol_scale and len(self._atr_sma_buf) >= 20:
                 atr_sma = sum(self._atr_sma_buf) / len(self._atr_sma_buf)
                 if atr_sma > 0:
-                    # vol_factor > 1 = high vol → lengthen filter → more smoothing
-                    # vol_factor < 1 = low vol  → shorten filter → more responsive
-                    raw_factor = (atr / atr_sma)
-                    clamped    = max(1.0 - self.vol_clamp,
-                                     min(1.0 + self.vol_clamp, raw_factor))
+                    raw_factor      = atr / atr_sma
+                    clamped         = max(1.0 - self.vol_clamp, min(1.0 + self.vol_clamp, raw_factor))
                     self.vol_factor = clamped
-                    er_len_val = max(self.fast_len,
-                                     min(self.slow_len,
-                                         round(er_len_val * self.vol_factor)))
+                    er_len_val      = max(self.fast_len, min(self.slow_len, round(er_len_val * self.vol_factor)))
 
         self.active_len = max(3, er_len_val)
 
-        # ---- STAGE 4: Main SuperSmoother ----
-        src = list(self._pre_buf)[-1] if self._pre_buf else close
+        # Stage 4: Main SuperSmoother
+        src = list(self._pre_buf)[-1] if self._pre_buf else raw
         ss  = self._supersmoother(src, self.active_len, "_main")
         self.ss_line = ss
+        prev_ss = list(self._ss_buf)[-1] if self._ss_buf else ss
         self._ss_buf.append(ss)
+        self._ssline_buf.append(ss)
 
-        # ---- STAGE 5: Regime gate ----
-        slope = (ss - list(self._ss_buf)[-2]) if len(self._ss_buf) >= 2 else 0.0
+        # Stage 5: Regime gate
+        # Normalise slope by stdev(ssLine, 50) — matches Pine Script exactly
+        slope        = ss - prev_ss
+        ssline_stdev = self._stdev(self._ssline_buf)
+        norm_slope   = abs(slope / ssline_stdev) if ssline_stdev > 0 else 0.0
+        self.quality = min(100.0, norm_slope * 70.0 + min(adx, 100.0))
+        regime_ok    = self.quality >= self.min_quality
+
+        # Stage 6: State machine
+        # Threshold = stdev(slope, 100) * hysteresis — matches Pine ta.stdev(ssLine-ssLine[1], 100)
         self._slope_stats.push(slope)
-        slope_stdev = self._slope_stats.stdev()
-        norm_slope  = abs(slope / slope_stdev) if slope_stdev > 0 else 0.0
-        adx_contrib = min(adx, 100.0)
-        self.quality = min(100.0, norm_slope * 70.0 + adx_contrib)
-
-        # ---- STAGE 6: State machine ----
-        threshold = slope_stdev * self.hysteresis
+        threshold = self._slope_stats.stdev() * self.hysteresis
         self._bars_since_flip += 1
-
         lock_ok = (self._bars_since_flip >= self.min_trend_bars) or (self.min_trend_bars == 0)
-        regime_ok = self.quality >= self.min_quality
 
-        if regime_ok and lock_ok:
-            if slope > threshold and self.trend != 1:
-                self.trend         = 1
-                self.bull_flip     = True
-                self._bars_since_flip = 0
+        # Compute desired direction (mirrors Pine Script ordering)
+        desired = self.trend
+        if slope > threshold and regime_ok:
+            desired = 1
+        elif slope < -threshold and regime_ok:
+            desired = -1
+
+        if desired != self.trend and lock_ok:
+            self.trend            = desired
+            self._bars_since_flip = 0
+            if desired == 1:
+                self.bull_flip = True
                 self.ride_line = ss - atr * self.buffer_mult
-            elif slope < -threshold and self.trend != -1:
-                self.trend         = -1
-                self.bear_flip     = True
-                self._bars_since_flip = 0
+            else:
+                self.bear_flip = True
                 self.ride_line = ss + atr * self.buffer_mult
 
-        # Ratchet ride line with trend
+        # Ratchet ride line
         if self.trend == 1:
-            new_ride = ss - atr * self.buffer_mult
-            self.ride_line = max(self.ride_line, new_ride)
+            self.ride_line = max(self.ride_line, ss - atr * self.buffer_mult)
         else:
-            new_ride = ss + atr * self.buffer_mult
-            self.ride_line = min(self.ride_line, new_ride)
+            self.ride_line = min(self.ride_line, ss + atr * self.buffer_mult)
 
         self._prev_close = close
         self._prev_high  = high
         self._prev_low   = low
 
     def update_params(self, params: dict) -> None:
-        """
-        Hot-update parameters from a dict (e.g. from Google Sheets reload).
-        Keys match __init__ parameter names.
-        """
         if "slow_len"       in params: self.slow_len       = max(10, int(params["slow_len"]))
         if "fast_len"       in params: self.fast_len       = max(3,  int(params["fast_len"]))
         if "er_len"         in params: self.er_len         = max(2,  int(params["er_len"]))
@@ -261,95 +217,61 @@ class ERGA_SS:
         if "min_trend_bars" in params: self.min_trend_bars = max(0, int(params["min_trend_bars"]))
         if "use_vol_scale"  in params: self.use_vol_scale  = bool(params["use_vol_scale"])
         if "vol_clamp"      in params: self.vol_clamp      = float(params["vol_clamp"])
+        if "use_hlc3"       in params: self.use_hlc3       = bool(params["use_hlc3"])
 
     @property
     def bullish_flip(self) -> bool:
-        """Alias for bull_flip (QuantConnect-friendly naming)."""
         return self.bull_flip
 
     @property
     def bearish_flip(self) -> bool:
-        """Alias for bear_flip (QuantConnect-friendly naming)."""
         return self.bear_flip
 
-    # -----------------------------------------------------------------------
-    # Internal: SuperSmoother (Ehlers 2-pole Butterworth)
-    # -----------------------------------------------------------------------
-
     def _supersmoother(self, src: float, length: int, tag: str) -> float:
-        """
-        Ehlers SuperSmoother filter. Hard frequency cutoff at the Nyquist
-        frequency for 'length'. tag differentiates the two filter instances
-        (_pre and _main) so each maintains independent state.
-        """
         length = max(2, length)
-        pi   = math.pi
-        a    = math.exp(-1.4142135623730951 * pi / length)
-        b    = 2.0 * a * math.cos(1.4142135623730951 * pi / length)
-        c2   = b
-        c3   = -(a * a)
-        c1   = 1.0 - c2 - c3
-
+        a  = math.exp(-1.4142135623730951 * math.pi / length)
+        b  = 2.0 * a * math.cos(1.4142135623730951 * math.pi / length)
+        c2 = b
+        c3 = -(a * a)
+        c1 = 1.0 - c2 - c3
         if tag == "_pre":
             s1, s2 = self._pre_ss1, self._pre_ss2
         else:
             s1, s2 = self._ss1, self._ss2
-
         val = c1 * (src + (s1 if s1 != 0.0 else src)) / 2.0 + c2 * s1 + c3 * s2
-
         if tag == "_pre":
             self._pre_ss2 = self._pre_ss1
             self._pre_ss1 = val
         else:
             self._ss2 = self._ss1
             self._ss1 = val
-
         return val
-
-    # -----------------------------------------------------------------------
-    # Internal: Efficiency Ratio
-    # -----------------------------------------------------------------------
 
     @staticmethod
     def _efficiency_ratio(buf: deque, length: int) -> float:
-        """
-        Kaufman Efficiency Ratio.
-        direction / sum(abs(price changes)) over 'length' bars.
-        Returns 0..1 where 1 = perfectly trending, 0 = pure chop.
-        """
         if len(buf) < length + 1:
             return 0.0
-        prices   = list(buf)
-        direction = abs(prices[-1] - prices[-(length + 1)])
+        prices     = list(buf)
+        direction  = abs(prices[-1] - prices[-(length + 1)])
         volatility = sum(abs(prices[-i] - prices[-i - 1]) for i in range(1, length + 1))
         return direction / volatility if volatility > 0 else 0.0
-
-    # -----------------------------------------------------------------------
-    # Internal: ATR (Wilder's smoothing)
-    # -----------------------------------------------------------------------
 
     def _calc_atr(self, close: float, high: float, low: float) -> float:
         if self._prev_close is None:
             self._atr_smooth = high - low
             return self._atr_smooth
-        tr = max(high - low,
-                 abs(high - self._prev_close),
-                 abs(low  - self._prev_close))
+        tr = max(high - low, abs(high - self._prev_close), abs(low - self._prev_close))
         k  = 1.0 / self.adx_len
         self._atr_smooth = self._atr_smooth * (1.0 - k) + tr * k
         return self._atr_smooth
 
-    # -----------------------------------------------------------------------
-    # Internal: ADX (Wilder's)
-    # -----------------------------------------------------------------------
-
     def _calc_adx(self, close: float, high: float, low: float) -> float:
         if self._prev_high is None or self._prev_low is None:
             return 0.0
-        up_move   = high - self._prev_high
-        down_move = self._prev_low - low
-        plus_dm   = up_move   if (up_move > down_move and up_move > 0)   else 0.0
-        minus_dm  = down_move if (down_move > up_move and down_move > 0) else 0.0
+        up_move  = high - self._prev_high
+        dn_move  = self._prev_low - low
+        plus_dm  = up_move if (up_move > dn_move and up_move > 0) else 0.0
+        minus_dm = dn_move if (dn_move > up_move and dn_move > 0) else 0.0
         atr = self._atr_smooth if self._atr_smooth > 0 else 1e-10
         k   = 1.0 / self.adx_len
         self._plus_di  = self._plus_di  * (1.0 - k) + (plus_dm  / atr) * k
@@ -361,46 +283,28 @@ class ERGA_SS:
         self._adx_smooth = self._adx_smooth * (1.0 - k) + dx * k
         return self._adx_smooth
 
+    @staticmethod
+    def _stdev(buf: deque) -> float:
+        n = len(buf)
+        if n < 2:
+            return 0.0
+        m = sum(buf) / n
+        return math.sqrt(sum((x - m) ** 2 for x in buf) / (n - 1))
 
-# ---------------------------------------------------------------------------
-# Helpers used by main.py
-# ---------------------------------------------------------------------------
 
 def get_confirm_bars(tf_minutes: int) -> int:
-    """
-    Returns the number of confirmation bars required before acting on a flip.
-    Derived automatically from the bar timeframe — no Google Sheet column needed.
-
-      15 min  → 2 bars  (45 min minimum trend duration at entry)
-      30 min  → 2 bars  (60 min minimum trend duration at entry)
-      60 min  → 1 bar
-     120 min  → 1 bar
-     180 min+ → 1 bar   (signal + next bar open is sufficient confirmation)
-    """
     if tf_minutes <= 30:
         return 2
     return 1
 
 
 def get_wait_minutes(tf_minutes: int) -> int:
-    """
-    Returns how many minutes after market open to wait before accepting signals.
-    Avoids the volatile open auction period on short timeframes.
-
-      ≤ 30 min → wait 15 minutes after open
-      > 30 min → no wait (longer bars already span the open)
-    """
     if tf_minutes <= 30:
         return 15
     return 0
 
 
 def parse_calc_mode(raw: str) -> str:
-    """
-    Normalises calc_mode strings from Google Sheets.
-    Accepts any capitalisation / spacing variant.
-    Returns exactly one of: "Adaptive", "Manual Slow", "Manual Fast"
-    """
     s = str(raw).strip().lower()
     if "fast" in s:
         return "Manual Fast"
