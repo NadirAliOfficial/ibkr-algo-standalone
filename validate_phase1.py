@@ -14,22 +14,37 @@ from indicator.erga_ss_lib import ERGA_SS
 load_dotenv()
 
 TICKERS = ["AAPL","MSFT","NVDA","TSLA","AMZN","GLD","XLE","AMD","JNJ","GDX"]
-TIMEFRAMES = {"1H": "1h", "4H": "4h", "1D": "1d"}
+TIMEFRAMES = {"1H": "1h", "2H": "2h", "3H": "3h", "4H": "4h", "1D": "1d"}
 
 PARAMS = dict(slow_len=50, fast_len=15, er_len=20, pre_len=5,
               calc_mode="Adaptive", min_quality=25.0, hysteresis=0.1,
               buffer_mult=0.5, min_trend_bars=3, use_hlc3=True)
 
+# Yahoo Finance native intervals
+YF_NATIVE = {"1h": "1h", "4h": "4h", "1d": "1d"}
+# Resample map: interval -> (fetch_as, pandas_resample_rule)
+YF_RESAMPLE = {"2h": ("1h", "2h"), "3h": ("1h", "3h")}
+
 
 def fetch(ticker: str, interval: str) -> pd.DataFrame:
-    period = "2y" if interval in ("1h", "4h") else "5y"
-    df = yf.download(ticker, period=period, interval=interval,
+    fetch_interval = YF_RESAMPLE[interval][0] if interval in YF_RESAMPLE else interval
+    period = "2y" if fetch_interval in ("1h", "4h") else "5y"
+    df = yf.download(ticker, period=period, interval=fetch_interval,
                      auto_adjust=True, progress=False, multi_level_index=False)
     if df is None or df.empty:
         return None
     df.columns = [c.lower() for c in df.columns]
     df.index = pd.to_datetime(df.index, utc=True)
-    return df[["open","high","low","close","volume"]].dropna()
+    df = df[["open","high","low","close","volume"]].dropna()
+
+    # Resample 1H → 2H or 3H
+    if interval in YF_RESAMPLE:
+        rule = YF_RESAMPLE[interval][1]
+        df = df.resample(rule, origin="start").agg(
+            {"open": "first", "high": "max", "low": "min", "close": "last", "volume": "sum"}
+        ).dropna(subset=["close"])
+
+    return df
 
 
 def run_indicator(df: pd.DataFrame):

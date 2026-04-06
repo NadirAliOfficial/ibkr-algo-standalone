@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-06T10:53:29.029309",
+  "generated": "2026-04-06T13:14:25.553987",
   "params": {
     "slow_len": 50,
     "fast_len": 15,
@@ -26,12 +26,14 @@
   ],
   "timeframes": [
     "1H",
+    "2H",
+    "3H",
     "4H",
     "1D"
   ],
   "total_runs": 30,
-  "successful_runs": 30,
-  "total_signals": 1000,
+  "successful_runs": 50,
+  "total_signals": 1641,
   "issues": [],
   "fixes_applied": [
     "Price source: close \u2192 hlc3 to match Pine Script default src=hlc3",
@@ -562,6 +564,504 @@
           }
         ]
       },
+      "2H": {
+        "status": "ok",
+        "bars": 1996,
+        "signals": 33,
+        "long": 16,
+        "short": 17,
+        "log": [
+          {
+            "bar": "2024-07-18 17:30",
+            "signal": "SHORT",
+            "close": 224.13,
+            "er": 0.128,
+            "quality": 29.0,
+            "active_len": 46
+          },
+          {
+            "bar": "2024-08-13 17:30",
+            "signal": "LONG",
+            "close": 220.66,
+            "er": 0.589,
+            "quality": 26.2,
+            "active_len": 29
+          },
+          {
+            "bar": "2024-09-04 13:30",
+            "signal": "SHORT",
+            "close": 218.68,
+            "er": 0.367,
+            "quality": 26.9,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-09-19 17:30",
+            "signal": "LONG",
+            "close": 229.47,
+            "er": 0.268,
+            "quality": 36.5,
+            "active_len": 41
+          },
+          {
+            "bar": "2024-10-24 19:30",
+            "signal": "SHORT",
+            "close": 230.57,
+            "er": 0.08,
+            "quality": 28.9,
+            "active_len": 47
+          },
+          {
+            "bar": "2024-11-08 17:30",
+            "signal": "LONG",
+            "close": 227.54,
+            "er": 0.379,
+            "quality": 27.3,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-01-02 13:30",
+            "signal": "SHORT",
+            "close": 245.74,
+            "er": 0.324,
+            "quality": 27.9,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-01-28 15:30",
+            "signal": "LONG",
+            "close": 238.55,
+            "er": 0.621,
+            "quality": 32.0,
+            "active_len": 28
+          },
+          {
+            "bar": "2025-02-27 15:30",
+            "signal": "SHORT",
+            "close": 241.06,
+            "er": 0.273,
+            "quality": 28.7,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-03-24 19:30",
+            "signal": "LONG",
+            "close": 220.43,
+            "er": 0.306,
+            "quality": 25.9,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-04-03 17:30",
+            "signal": "SHORT",
+            "close": 202.2,
+            "er": 0.566,
+            "quality": 32.9,
+            "active_len": 30
+          },
+          {
+            "bar": "2025-04-14 15:30",
+            "signal": "LONG",
+            "close": 203.86,
+            "er": 0.289,
+            "quality": 26.2,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-05-05 17:30",
+            "signal": "SHORT",
+            "close": 199.4,
+            "er": 0.44,
+            "quality": 31.2,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-05-12 19:30",
+            "signal": "LONG",
+            "close": 210.83,
+            "er": 0.446,
+            "quality": 35.7,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-05-21 13:30",
+            "signal": "SHORT",
+            "close": 206.58,
+            "er": 0.431,
+            "quality": 30.2,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-06-04 19:30",
+            "signal": "LONG",
+            "close": 202.89,
+            "er": 0.175,
+            "quality": 25.3,
+            "active_len": 44
+          },
+          {
+            "bar": "2025-06-13 13:30",
+            "signal": "SHORT",
+            "close": 197.51,
+            "er": 0.4,
+            "quality": 25.3,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-06-24 13:30",
+            "signal": "LONG",
+            "close": 201.38,
+            "er": 0.351,
+            "quality": 25.9,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-07-30 15:30",
+            "signal": "SHORT",
+            "close": 209.76,
+            "er": 0.436,
+            "quality": 27.0,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-08-07 13:30",
+            "signal": "LONG",
+            "close": 219.63,
+            "er": 0.303,
+            "quality": 28.9,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-08-20 19:30",
+            "signal": "SHORT",
+            "close": 225.96,
+            "er": 0.581,
+            "quality": 27.7,
+            "active_len": 30
+          },
+          {
+            "bar": "2025-08-29 17:30",
+            "signal": "LONG",
+            "close": 232.35,
+            "er": 0.38,
+            "quality": 25.3,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-09-10 17:30",
+            "signal": "SHORT",
+            "close": 226.18,
+            "er": 0.537,
+            "quality": 29.1,
+            "active_len": 31
+          },
+          {
+            "bar": "2025-09-16 15:30",
+            "signal": "LONG",
+            "close": 239.09,
+            "er": 0.068,
+            "quality": 29.0,
+            "active_len": 48
+          },
+          {
+            "bar": "2025-10-10 13:30",
+            "signal": "SHORT",
+            "close": 249.41,
+            "er": 0.388,
+            "quality": 27.6,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-10-20 15:30",
+            "signal": "LONG",
+            "close": 263.17,
+            "er": 0.481,
+            "quality": 33.8,
+            "active_len": 33
+          },
+          {
+            "bar": "2025-11-18 17:30",
+            "signal": "SHORT",
+            "close": 268.03,
+            "er": 0.322,
+            "quality": 25.4,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-11-24 19:30",
+            "signal": "LONG",
+            "close": 275.98,
+            "er": 0.335,
+            "quality": 27.1,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-12-15 19:30",
+            "signal": "SHORT",
+            "close": 274.11,
+            "er": 0.269,
+            "quality": 25.8,
+            "active_len": 41
+          },
+          {
+            "bar": "2026-01-27 17:30",
+            "signal": "LONG",
+            "close": 259.88,
+            "er": 0.401,
+            "quality": 33.5,
+            "active_len": 36
+          },
+          {
+            "bar": "2026-02-12 19:30",
+            "signal": "SHORT",
+            "close": 261.59,
+            "er": 0.411,
+            "quality": 30.3,
+            "active_len": 36
+          },
+          {
+            "bar": "2026-02-24 19:30",
+            "signal": "LONG",
+            "close": 272.17,
+            "er": 0.335,
+            "quality": 25.5,
+            "active_len": 38
+          },
+          {
+            "bar": "2026-03-03 13:30",
+            "signal": "SHORT",
+            "close": 262.26,
+            "er": 0.391,
+            "quality": 27.5,
+            "active_len": 36
+          }
+        ]
+      },
+      "3H": {
+        "status": "ok",
+        "bars": 1498,
+        "signals": 27,
+        "long": 13,
+        "short": 14,
+        "log": [
+          {
+            "bar": "2024-07-19 16:30",
+            "signal": "SHORT",
+            "close": 225.01,
+            "er": 0.281,
+            "quality": 28.0,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-08-14 16:30",
+            "signal": "LONG",
+            "close": 221.16,
+            "er": 0.578,
+            "quality": 25.8,
+            "active_len": 30
+          },
+          {
+            "bar": "2024-09-04 16:30",
+            "signal": "SHORT",
+            "close": 220.55,
+            "er": 0.276,
+            "quality": 30.7,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-09-19 19:30",
+            "signal": "LONG",
+            "close": 228.82,
+            "er": 0.304,
+            "quality": 27.9,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-11-01 13:30",
+            "signal": "SHORT",
+            "close": 222.16,
+            "er": 0.322,
+            "quality": 28.7,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-11-26 19:30",
+            "signal": "LONG",
+            "close": 235.08,
+            "er": 0.385,
+            "quality": 28.4,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-01-02 16:30",
+            "signal": "SHORT",
+            "close": 242.49,
+            "er": 0.38,
+            "quality": 29.6,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-01-29 16:30",
+            "signal": "LONG",
+            "close": 236.45,
+            "er": 0.178,
+            "quality": 32.3,
+            "active_len": 44
+          },
+          {
+            "bar": "2025-02-28 13:30",
+            "signal": "SHORT",
+            "close": 236.92,
+            "er": 0.394,
+            "quality": 27.6,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-03-25 16:30",
+            "signal": "LONG",
+            "close": 223.42,
+            "er": 0.439,
+            "quality": 29.1,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-04-03 19:30",
+            "signal": "SHORT",
+            "close": 203.47,
+            "er": 0.514,
+            "quality": 26.9,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-04-25 19:30",
+            "signal": "LONG",
+            "close": 209.23,
+            "er": 0.321,
+            "quality": 25.1,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-05-06 16:30",
+            "signal": "SHORT",
+            "close": 199.71,
+            "er": 0.393,
+            "quality": 31.2,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-05-13 19:30",
+            "signal": "LONG",
+            "close": 212.84,
+            "er": 0.43,
+            "quality": 34.4,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-05-22 13:30",
+            "signal": "SHORT",
+            "close": 201.95,
+            "er": 0.642,
+            "quality": 37.1,
+            "active_len": 28
+          },
+          {
+            "bar": "2025-06-25 13:30",
+            "signal": "LONG",
+            "close": 201.87,
+            "er": 0.361,
+            "quality": 27.8,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-07-30 19:30",
+            "signal": "SHORT",
+            "close": 209.02,
+            "er": 0.411,
+            "quality": 28.5,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-08-07 19:30",
+            "signal": "LONG",
+            "close": 220.13,
+            "er": 0.256,
+            "quality": 32.1,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-09-11 19:30",
+            "signal": "SHORT",
+            "close": 230.02,
+            "er": 0.292,
+            "quality": 25.5,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-09-17 13:30",
+            "signal": "LONG",
+            "close": 239.67,
+            "er": 0.09,
+            "quality": 27.2,
+            "active_len": 47
+          },
+          {
+            "bar": "2025-10-10 16:30",
+            "signal": "SHORT",
+            "close": 246.16,
+            "er": 0.45,
+            "quality": 28.0,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-10-20 19:30",
+            "signal": "LONG",
+            "close": 262.23,
+            "er": 0.328,
+            "quality": 31.1,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-12-16 16:30",
+            "signal": "SHORT",
+            "close": 273.57,
+            "er": 0.375,
+            "quality": 26.4,
+            "active_len": 37
+          },
+          {
+            "bar": "2026-01-29 13:30",
+            "signal": "LONG",
+            "close": 256.17,
+            "er": 0.254,
+            "quality": 29.8,
+            "active_len": 41
+          },
+          {
+            "bar": "2026-02-13 16:30",
+            "signal": "SHORT",
+            "close": 258.46,
+            "er": 0.473,
+            "quality": 30.3,
+            "active_len": 33
+          },
+          {
+            "bar": "2026-02-25 19:30",
+            "signal": "LONG",
+            "close": 274.18,
+            "er": 0.564,
+            "quality": 27.0,
+            "active_len": 30
+          },
+          {
+            "bar": "2026-03-03 19:30",
+            "signal": "SHORT",
+            "close": 263.71,
+            "er": 0.081,
+            "quality": 26.4,
+            "active_len": 47
+          }
+        ]
+      },
       "4H": {
         "status": "ok",
         "bars": 998,
@@ -791,7 +1291,7 @@
             "signal": "LONG",
             "close": 159.46,
             "er": 0.638,
-            "quality": 28.2,
+            "quality": 28.4,
             "active_len": 28
           },
           {
@@ -1404,6 +1904,504 @@
             "er": 0.352,
             "quality": 26.2,
             "active_len": 38
+          }
+        ]
+      },
+      "2H": {
+        "status": "ok",
+        "bars": 1996,
+        "signals": 35,
+        "long": 17,
+        "short": 18,
+        "log": [
+          {
+            "bar": "2024-05-30 17:30",
+            "signal": "SHORT",
+            "close": 416.71,
+            "er": 0.381,
+            "quality": 27.9,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-06-07 13:30",
+            "signal": "LONG",
+            "close": 425.0,
+            "er": 0.475,
+            "quality": 25.2,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-07-12 13:30",
+            "signal": "SHORT",
+            "close": 454.61,
+            "er": 0.312,
+            "quality": 25.4,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-08-14 19:30",
+            "signal": "LONG",
+            "close": 416.62,
+            "er": 0.713,
+            "quality": 25.9,
+            "active_len": 25
+          },
+          {
+            "bar": "2024-08-26 15:30",
+            "signal": "SHORT",
+            "close": 413.45,
+            "er": 0.2,
+            "quality": 25.1,
+            "active_len": 43
+          },
+          {
+            "bar": "2024-09-11 19:30",
+            "signal": "LONG",
+            "close": 422.94,
+            "er": 0.357,
+            "quality": 26.4,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-09-30 13:30",
+            "signal": "SHORT",
+            "close": 427.92,
+            "er": 0.408,
+            "quality": 25.5,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-10-14 19:30",
+            "signal": "LONG",
+            "close": 419.1,
+            "er": 0.445,
+            "quality": 25.3,
+            "active_len": 34
+          },
+          {
+            "bar": "2024-10-31 19:30",
+            "signal": "SHORT",
+            "close": 406.33,
+            "er": 0.326,
+            "quality": 38.3,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-11-07 19:30",
+            "signal": "LONG",
+            "close": 425.51,
+            "er": 0.506,
+            "quality": 27.6,
+            "active_len": 32
+          },
+          {
+            "bar": "2024-11-19 13:30",
+            "signal": "SHORT",
+            "close": 413.12,
+            "er": 0.15,
+            "quality": 26.2,
+            "active_len": 45
+          },
+          {
+            "bar": "2024-11-26 17:30",
+            "signal": "LONG",
+            "close": 426.39,
+            "er": 0.384,
+            "quality": 28.2,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-12-19 17:30",
+            "signal": "SHORT",
+            "close": 440.05,
+            "er": 0.404,
+            "quality": 27.8,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-01-22 13:30",
+            "signal": "LONG",
+            "close": 439.77,
+            "er": 0.553,
+            "quality": 27.1,
+            "active_len": 31
+          },
+          {
+            "bar": "2025-01-30 19:30",
+            "signal": "SHORT",
+            "close": 414.86,
+            "er": 0.423,
+            "quality": 27.5,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-03-25 17:30",
+            "signal": "LONG",
+            "close": 393.96,
+            "er": 0.517,
+            "quality": 27.5,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-03-28 19:30",
+            "signal": "SHORT",
+            "close": 378.82,
+            "er": 0.414,
+            "quality": 30.4,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-04-11 13:30",
+            "signal": "LONG",
+            "close": 382.57,
+            "er": 0.136,
+            "quality": 25.3,
+            "active_len": 45
+          },
+          {
+            "bar": "2025-04-21 15:30",
+            "signal": "SHORT",
+            "close": 358.54,
+            "er": 0.634,
+            "quality": 30.4,
+            "active_len": 28
+          },
+          {
+            "bar": "2025-04-24 17:30",
+            "signal": "LONG",
+            "close": 385.8,
+            "er": 0.287,
+            "quality": 25.2,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-08-19 17:30",
+            "signal": "SHORT",
+            "close": 508.97,
+            "er": 0.612,
+            "quality": 29.6,
+            "active_len": 29
+          },
+          {
+            "bar": "2025-09-12 15:30",
+            "signal": "LONG",
+            "close": 512.03,
+            "er": 0.591,
+            "quality": 25.1,
+            "active_len": 29
+          },
+          {
+            "bar": "2025-09-26 19:30",
+            "signal": "SHORT",
+            "close": 511.55,
+            "er": 0.217,
+            "quality": 25.2,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-09-29 19:30",
+            "signal": "LONG",
+            "close": 514.68,
+            "er": 0.006,
+            "quality": 30.1,
+            "active_len": 50
+          },
+          {
+            "bar": "2025-10-14 13:30",
+            "signal": "SHORT",
+            "close": 510.68,
+            "er": 0.504,
+            "quality": 27.6,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-10-23 17:30",
+            "signal": "LONG",
+            "close": 522.57,
+            "er": 0.493,
+            "quality": 27.3,
+            "active_len": 33
+          },
+          {
+            "bar": "2025-11-03 13:30",
+            "signal": "SHORT",
+            "close": 519.46,
+            "er": 0.186,
+            "quality": 25.2,
+            "active_len": 43
+          },
+          {
+            "bar": "2025-12-01 19:30",
+            "signal": "LONG",
+            "close": 486.83,
+            "er": 0.318,
+            "quality": 31.9,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-12-12 19:30",
+            "signal": "SHORT",
+            "close": 478.47,
+            "er": 0.119,
+            "quality": 26.2,
+            "active_len": 46
+          },
+          {
+            "bar": "2025-12-19 15:30",
+            "signal": "LONG",
+            "close": 485.88,
+            "er": 0.288,
+            "quality": 25.7,
+            "active_len": 40
+          },
+          {
+            "bar": "2026-01-02 17:30",
+            "signal": "SHORT",
+            "close": 472.59,
+            "er": 0.561,
+            "quality": 31.6,
+            "active_len": 30
+          },
+          {
+            "bar": "2026-01-26 17:30",
+            "signal": "LONG",
+            "close": 472.66,
+            "er": 0.176,
+            "quality": 25.8,
+            "active_len": 44
+          },
+          {
+            "bar": "2026-01-29 19:30",
+            "signal": "SHORT",
+            "close": 433.48,
+            "er": 0.194,
+            "quality": 27.8,
+            "active_len": 43
+          },
+          {
+            "bar": "2026-03-06 15:30",
+            "signal": "LONG",
+            "close": 410.69,
+            "er": 0.458,
+            "quality": 25.4,
+            "active_len": 34
+          },
+          {
+            "bar": "2026-03-16 13:30",
+            "signal": "SHORT",
+            "close": 397.71,
+            "er": 0.449,
+            "quality": 26.1,
+            "active_len": 34
+          }
+        ]
+      },
+      "3H": {
+        "status": "ok",
+        "bars": 1498,
+        "signals": 25,
+        "long": 12,
+        "short": 13,
+        "log": [
+          {
+            "bar": "2024-05-31 16:30",
+            "signal": "SHORT",
+            "close": 407.33,
+            "er": 0.532,
+            "quality": 34.3,
+            "active_len": 31
+          },
+          {
+            "bar": "2024-06-11 16:30",
+            "signal": "LONG",
+            "close": 431.49,
+            "er": 0.656,
+            "quality": 27.0,
+            "active_len": 27
+          },
+          {
+            "bar": "2024-07-15 19:30",
+            "signal": "SHORT",
+            "close": 454.04,
+            "er": 0.303,
+            "quality": 25.1,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-08-15 13:30",
+            "signal": "LONG",
+            "close": 420.05,
+            "er": 0.422,
+            "quality": 25.1,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-08-28 13:30",
+            "signal": "SHORT",
+            "close": 409.01,
+            "er": 0.337,
+            "quality": 27.3,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-09-12 16:30",
+            "signal": "LONG",
+            "close": 426.23,
+            "er": 0.428,
+            "quality": 27.3,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-10-01 13:30",
+            "signal": "SHORT",
+            "close": 421.82,
+            "er": 0.533,
+            "quality": 26.6,
+            "active_len": 31
+          },
+          {
+            "bar": "2024-10-23 16:30",
+            "signal": "LONG",
+            "close": 424.55,
+            "er": 0.146,
+            "quality": 25.3,
+            "active_len": 45
+          },
+          {
+            "bar": "2024-11-01 16:30",
+            "signal": "SHORT",
+            "close": 411.61,
+            "er": 0.224,
+            "quality": 32.0,
+            "active_len": 42
+          },
+          {
+            "bar": "2024-11-27 13:30",
+            "signal": "LONG",
+            "close": 424.58,
+            "er": 0.272,
+            "quality": 26.9,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-12-20 13:30",
+            "signal": "SHORT",
+            "close": 440.25,
+            "er": 0.345,
+            "quality": 33.6,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-01-22 19:30",
+            "signal": "LONG",
+            "close": 446.16,
+            "er": 0.673,
+            "quality": 28.9,
+            "active_len": 26
+          },
+          {
+            "bar": "2025-01-31 16:30",
+            "signal": "SHORT",
+            "close": 416.43,
+            "er": 0.378,
+            "quality": 27.5,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-04-14 13:30",
+            "signal": "LONG",
+            "close": 385.81,
+            "er": 0.117,
+            "quality": 25.3,
+            "active_len": 46
+          },
+          {
+            "bar": "2025-04-21 19:30",
+            "signal": "SHORT",
+            "close": 359.14,
+            "er": 0.303,
+            "quality": 25.9,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-04-25 19:30",
+            "signal": "LONG",
+            "close": 391.62,
+            "er": 0.214,
+            "quality": 27.4,
+            "active_len": 43
+          },
+          {
+            "bar": "2025-08-20 16:30",
+            "signal": "SHORT",
+            "close": 507.0,
+            "er": 0.358,
+            "quality": 27.1,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-09-15 13:30",
+            "signal": "LONG",
+            "close": 512.51,
+            "er": 0.12,
+            "quality": 26.2,
+            "active_len": 46
+          },
+          {
+            "bar": "2025-10-15 19:30",
+            "signal": "SHORT",
+            "close": 513.74,
+            "er": 0.321,
+            "quality": 25.1,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-10-24 19:30",
+            "signal": "LONG",
+            "close": 523.5,
+            "er": 0.388,
+            "quality": 25.9,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-11-05 16:30",
+            "signal": "SHORT",
+            "close": 508.43,
+            "er": 0.353,
+            "quality": 25.9,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-12-22 16:30",
+            "signal": "LONG",
+            "close": 485.88,
+            "er": 0.061,
+            "quality": 25.9,
+            "active_len": 48
+          },
+          {
+            "bar": "2026-01-02 19:30",
+            "signal": "SHORT",
+            "close": 472.93,
+            "er": 0.48,
+            "quality": 32.9,
+            "active_len": 33
+          },
+          {
+            "bar": "2026-01-27 16:30",
+            "signal": "LONG",
+            "close": 482.08,
+            "er": 0.346,
+            "quality": 25.4,
+            "active_len": 38
+          },
+          {
+            "bar": "2026-01-30 13:30",
+            "signal": "SHORT",
+            "close": 431.25,
+            "er": 0.084,
+            "quality": 25.4,
+            "active_len": 47
           }
         ]
       },
@@ -2348,6 +3346,552 @@
           }
         ]
       },
+      "2H": {
+        "status": "ok",
+        "bars": 1996,
+        "signals": 37,
+        "long": 18,
+        "short": 19,
+        "log": [
+          {
+            "bar": "2024-04-22 15:30",
+            "signal": "SHORT",
+            "close": 79.47,
+            "er": 0.471,
+            "quality": 31.6,
+            "active_len": 34
+          },
+          {
+            "bar": "2024-04-29 17:30",
+            "signal": "LONG",
+            "close": 87.09,
+            "er": 0.465,
+            "quality": 25.1,
+            "active_len": 34
+          },
+          {
+            "bar": "2024-06-24 17:30",
+            "signal": "SHORT",
+            "close": 120.38,
+            "er": 0.408,
+            "quality": 25.6,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-07-09 15:30",
+            "signal": "LONG",
+            "close": 129.82,
+            "er": 0.302,
+            "quality": 26.0,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-07-17 13:30",
+            "signal": "SHORT",
+            "close": 119.78,
+            "er": 0.601,
+            "quality": 26.7,
+            "active_len": 29
+          },
+          {
+            "bar": "2024-08-13 17:30",
+            "signal": "LONG",
+            "close": 115.67,
+            "er": 0.336,
+            "quality": 27.2,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-08-29 13:30",
+            "signal": "SHORT",
+            "close": 120.99,
+            "er": 0.305,
+            "quality": 29.7,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-09-12 13:30",
+            "signal": "LONG",
+            "close": 118.67,
+            "er": 0.455,
+            "quality": 36.4,
+            "active_len": 34
+          },
+          {
+            "bar": "2024-10-31 15:30",
+            "signal": "SHORT",
+            "close": 133.32,
+            "er": 0.337,
+            "quality": 28.0,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-11-06 19:30",
+            "signal": "LONG",
+            "close": 145.62,
+            "er": 0.278,
+            "quality": 28.9,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-11-18 15:30",
+            "signal": "SHORT",
+            "close": 139.53,
+            "er": 0.267,
+            "quality": 26.2,
+            "active_len": 41
+          },
+          {
+            "bar": "2024-12-04 17:30",
+            "signal": "LONG",
+            "close": 145.51,
+            "er": 0.366,
+            "quality": 25.1,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-12-10 19:30",
+            "signal": "SHORT",
+            "close": 135.0,
+            "er": 0.231,
+            "quality": 26.2,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-01-03 17:30",
+            "signal": "LONG",
+            "close": 144.37,
+            "er": 0.179,
+            "quality": 25.3,
+            "active_len": 44
+          },
+          {
+            "bar": "2025-01-13 15:30",
+            "signal": "SHORT",
+            "close": 132.63,
+            "er": 0.338,
+            "quality": 25.5,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-01-22 13:30",
+            "signal": "LONG",
+            "close": 146.38,
+            "er": 0.502,
+            "quality": 26.1,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-01-27 17:30",
+            "signal": "SHORT",
+            "close": 118.81,
+            "er": 0.454,
+            "quality": 36.6,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-02-10 15:30",
+            "signal": "LONG",
+            "close": 134.03,
+            "er": 0.791,
+            "quality": 26.4,
+            "active_len": 22
+          },
+          {
+            "bar": "2025-02-25 15:30",
+            "signal": "SHORT",
+            "close": 128.52,
+            "er": 0.632,
+            "quality": 25.3,
+            "active_len": 28
+          },
+          {
+            "bar": "2025-03-14 15:30",
+            "signal": "LONG",
+            "close": 120.54,
+            "er": 0.424,
+            "quality": 30.1,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-03-27 15:30",
+            "signal": "SHORT",
+            "close": 111.69,
+            "er": 0.317,
+            "quality": 28.2,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-04-10 19:30",
+            "signal": "LONG",
+            "close": 107.7,
+            "er": 0.088,
+            "quality": 33.3,
+            "active_len": 47
+          },
+          {
+            "bar": "2025-04-21 13:30",
+            "signal": "SHORT",
+            "close": 95.89,
+            "er": 0.445,
+            "quality": 28.5,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-04-25 15:30",
+            "signal": "LONG",
+            "close": 111.87,
+            "er": 0.388,
+            "quality": 30.3,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-08-20 13:30",
+            "signal": "SHORT",
+            "close": 172.43,
+            "er": 0.505,
+            "quality": 26.1,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-08-26 15:30",
+            "signal": "LONG",
+            "close": 181.62,
+            "er": 0.248,
+            "quality": 28.3,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-08-29 19:30",
+            "signal": "SHORT",
+            "close": 174.28,
+            "er": 0.227,
+            "quality": 39.8,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-09-10 19:30",
+            "signal": "LONG",
+            "close": 177.33,
+            "er": 0.307,
+            "quality": 32.9,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-10-16 13:30",
+            "signal": "SHORT",
+            "close": 182.32,
+            "er": 0.34,
+            "quality": 25.0,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-10-27 15:30",
+            "signal": "LONG",
+            "close": 191.33,
+            "er": 0.391,
+            "quality": 28.1,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-11-06 15:30",
+            "signal": "SHORT",
+            "close": 186.82,
+            "er": 0.372,
+            "quality": 30.8,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-12-22 17:30",
+            "signal": "LONG",
+            "close": 183.38,
+            "er": 0.274,
+            "quality": 26.8,
+            "active_len": 40
+          },
+          {
+            "bar": "2026-01-20 19:30",
+            "signal": "SHORT",
+            "close": 178.21,
+            "er": 0.266,
+            "quality": 26.3,
+            "active_len": 41
+          },
+          {
+            "bar": "2026-01-27 15:30",
+            "signal": "LONG",
+            "close": 189.68,
+            "er": 0.502,
+            "quality": 28.1,
+            "active_len": 32
+          },
+          {
+            "bar": "2026-02-03 17:30",
+            "signal": "SHORT",
+            "close": 178.7,
+            "er": 0.365,
+            "quality": 28.1,
+            "active_len": 37
+          },
+          {
+            "bar": "2026-02-10 13:30",
+            "signal": "LONG",
+            "close": 189.17,
+            "er": 0.212,
+            "quality": 29.7,
+            "active_len": 43
+          },
+          {
+            "bar": "2026-02-27 17:30",
+            "signal": "SHORT",
+            "close": 178.66,
+            "er": 0.332,
+            "quality": 28.5,
+            "active_len": 38
+          }
+        ]
+      },
+      "3H": {
+        "status": "ok",
+        "bars": 1498,
+        "signals": 29,
+        "long": 14,
+        "short": 15,
+        "log": [
+          {
+            "bar": "2024-07-17 19:30",
+            "signal": "SHORT",
+            "close": 117.85,
+            "er": 0.466,
+            "quality": 30.2,
+            "active_len": 34
+          },
+          {
+            "bar": "2024-08-14 13:30",
+            "signal": "LONG",
+            "close": 117.11,
+            "er": 0.486,
+            "quality": 25.9,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-08-29 19:30",
+            "signal": "SHORT",
+            "close": 117.59,
+            "er": 0.378,
+            "quality": 31.1,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-09-12 19:30",
+            "signal": "LONG",
+            "close": 119.18,
+            "er": 0.487,
+            "quality": 36.5,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-10-31 19:30",
+            "signal": "SHORT",
+            "close": 132.7,
+            "er": 0.367,
+            "quality": 30.3,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-11-07 13:30",
+            "signal": "LONG",
+            "close": 147.96,
+            "er": 0.205,
+            "quality": 26.3,
+            "active_len": 43
+          },
+          {
+            "bar": "2024-11-27 16:30",
+            "signal": "SHORT",
+            "close": 134.15,
+            "er": 0.234,
+            "quality": 25.9,
+            "active_len": 42
+          },
+          {
+            "bar": "2024-12-05 19:30",
+            "signal": "LONG",
+            "close": 145.01,
+            "er": 0.433,
+            "quality": 27.5,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-12-13 19:30",
+            "signal": "SHORT",
+            "close": 134.22,
+            "er": 0.482,
+            "quality": 25.1,
+            "active_len": 33
+          },
+          {
+            "bar": "2025-01-06 13:30",
+            "signal": "LONG",
+            "close": 151.89,
+            "er": 0.332,
+            "quality": 27.5,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-01-14 19:30",
+            "signal": "SHORT",
+            "close": 131.85,
+            "er": 0.343,
+            "quality": 26.0,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-01-22 16:30",
+            "signal": "LONG",
+            "close": 147.37,
+            "er": 0.396,
+            "quality": 25.7,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-01-27 19:30",
+            "signal": "SHORT",
+            "close": 118.51,
+            "er": 0.381,
+            "quality": 33.2,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-02-14 16:30",
+            "signal": "LONG",
+            "close": 137.82,
+            "er": 0.596,
+            "quality": 25.1,
+            "active_len": 29
+          },
+          {
+            "bar": "2025-02-25 19:30",
+            "signal": "SHORT",
+            "close": 126.63,
+            "er": 0.377,
+            "quality": 29.7,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-03-17 16:30",
+            "signal": "LONG",
+            "close": 120.36,
+            "er": 0.354,
+            "quality": 27.1,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-03-27 19:30",
+            "signal": "SHORT",
+            "close": 111.43,
+            "er": 0.264,
+            "quality": 25.0,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-04-14 13:30",
+            "signal": "LONG",
+            "close": 110.03,
+            "er": 0.148,
+            "quality": 29.7,
+            "active_len": 45
+          },
+          {
+            "bar": "2025-04-21 16:30",
+            "signal": "SHORT",
+            "close": 95.6,
+            "er": 0.531,
+            "quality": 27.4,
+            "active_len": 31
+          },
+          {
+            "bar": "2025-04-28 19:30",
+            "signal": "LONG",
+            "close": 108.64,
+            "er": 0.229,
+            "quality": 25.1,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-08-20 16:30",
+            "signal": "SHORT",
+            "close": 174.58,
+            "er": 0.373,
+            "quality": 26.3,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-08-28 16:30",
+            "signal": "LONG",
+            "close": 180.08,
+            "er": 0.227,
+            "quality": 25.4,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-09-02 13:30",
+            "signal": "SHORT",
+            "close": 167.93,
+            "er": 0.226,
+            "quality": 34.9,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-09-11 19:30",
+            "signal": "LONG",
+            "close": 177.09,
+            "er": 0.25,
+            "quality": 33.3,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-11-06 19:30",
+            "signal": "SHORT",
+            "close": 188.17,
+            "er": 0.463,
+            "quality": 31.7,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-12-23 13:30",
+            "signal": "LONG",
+            "close": 187.91,
+            "er": 0.348,
+            "quality": 26.7,
+            "active_len": 38
+          },
+          {
+            "bar": "2026-02-04 13:30",
+            "signal": "SHORT",
+            "close": 175.25,
+            "er": 0.326,
+            "quality": 30.6,
+            "active_len": 39
+          },
+          {
+            "bar": "2026-02-11 13:30",
+            "signal": "LONG",
+            "close": 191.29,
+            "er": 0.034,
+            "quality": 25.9,
+            "active_len": 49
+          },
+          {
+            "bar": "2026-03-02 13:30",
+            "signal": "SHORT",
+            "close": 180.92,
+            "er": 0.232,
+            "quality": 27.5,
+            "active_len": 42
+          }
+        ]
+      },
       "4H": {
         "status": "ok",
         "bars": 998,
@@ -3158,6 +4702,488 @@
             "er": 0.427,
             "quality": 30.2,
             "active_len": 35
+          }
+        ]
+      },
+      "2H": {
+        "status": "ok",
+        "bars": 1996,
+        "signals": 33,
+        "long": 16,
+        "short": 17,
+        "log": [
+          {
+            "bar": "2024-04-19 13:30",
+            "signal": "SHORT",
+            "close": 149.96,
+            "er": 0.857,
+            "quality": 50.3,
+            "active_len": 20
+          },
+          {
+            "bar": "2024-04-25 15:30",
+            "signal": "LONG",
+            "close": 164.63,
+            "er": 0.367,
+            "quality": 47.9,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-05-09 15:30",
+            "signal": "SHORT",
+            "close": 173.16,
+            "er": 0.338,
+            "quality": 28.1,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-05-21 19:30",
+            "signal": "LONG",
+            "close": 186.69,
+            "er": 0.35,
+            "quality": 25.8,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-06-11 13:30",
+            "signal": "SHORT",
+            "close": 168.41,
+            "er": 0.297,
+            "quality": 30.1,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-06-13 15:30",
+            "signal": "LONG",
+            "close": 183.75,
+            "er": 0.208,
+            "quality": 27.1,
+            "active_len": 43
+          },
+          {
+            "bar": "2024-07-17 15:30",
+            "signal": "SHORT",
+            "close": 249.9,
+            "er": 0.223,
+            "quality": 36.4,
+            "active_len": 42
+          },
+          {
+            "bar": "2024-08-15 15:30",
+            "signal": "LONG",
+            "close": 213.93,
+            "er": 0.383,
+            "quality": 32.6,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-08-27 13:30",
+            "signal": "SHORT",
+            "close": 209.33,
+            "er": 0.351,
+            "quality": 29.5,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-09-05 13:30",
+            "signal": "LONG",
+            "close": 227.66,
+            "er": 0.45,
+            "quality": 29.0,
+            "active_len": 34
+          },
+          {
+            "bar": "2024-10-03 15:30",
+            "signal": "SHORT",
+            "close": 240.25,
+            "er": 0.293,
+            "quality": 40.0,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-10-24 15:30",
+            "signal": "LONG",
+            "close": 256.9,
+            "er": 0.615,
+            "quality": 44.5,
+            "active_len": 28
+          },
+          {
+            "bar": "2024-11-04 13:30",
+            "signal": "SHORT",
+            "close": 246.27,
+            "er": 0.685,
+            "quality": 25.2,
+            "active_len": 26
+          },
+          {
+            "bar": "2024-11-06 19:30",
+            "signal": "LONG",
+            "close": 288.47,
+            "er": 0.418,
+            "quality": 27.6,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-12-23 15:30",
+            "signal": "SHORT",
+            "close": 430.67,
+            "er": 0.17,
+            "quality": 31.4,
+            "active_len": 44
+          },
+          {
+            "bar": "2025-03-24 15:30",
+            "signal": "LONG",
+            "close": 274.04,
+            "er": 0.537,
+            "quality": 25.2,
+            "active_len": 31
+          },
+          {
+            "bar": "2025-03-31 19:30",
+            "signal": "SHORT",
+            "close": 259.27,
+            "er": 0.22,
+            "quality": 25.1,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-04-24 17:30",
+            "signal": "LONG",
+            "close": 255.95,
+            "er": 0.286,
+            "quality": 26.5,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-06-04 19:30",
+            "signal": "SHORT",
+            "close": 332.21,
+            "er": 0.334,
+            "quality": 25.3,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-06-23 17:30",
+            "signal": "LONG",
+            "close": 348.75,
+            "er": 0.385,
+            "quality": 25.8,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-06-30 15:30",
+            "signal": "SHORT",
+            "close": 319.8,
+            "er": 0.791,
+            "quality": 25.9,
+            "active_len": 22
+          },
+          {
+            "bar": "2025-07-14 15:30",
+            "signal": "LONG",
+            "close": 315.34,
+            "er": 0.523,
+            "quality": 25.2,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-07-25 13:30",
+            "signal": "SHORT",
+            "close": 318.44,
+            "er": 0.192,
+            "quality": 35.7,
+            "active_len": 43
+          },
+          {
+            "bar": "2025-08-08 13:30",
+            "signal": "LONG",
+            "close": 333.19,
+            "er": 0.677,
+            "quality": 30.3,
+            "active_len": 26
+          },
+          {
+            "bar": "2025-08-19 17:30",
+            "signal": "SHORT",
+            "close": 329.94,
+            "er": 0.322,
+            "quality": 26.7,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-08-25 17:30",
+            "signal": "LONG",
+            "close": 348.46,
+            "er": 0.26,
+            "quality": 27.3,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-09-02 17:30",
+            "signal": "SHORT",
+            "close": 329.29,
+            "er": 0.458,
+            "quality": 32.4,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-09-08 13:30",
+            "signal": "LONG",
+            "close": 349.28,
+            "er": 0.193,
+            "quality": 26.1,
+            "active_len": 43
+          },
+          {
+            "bar": "2025-10-10 15:30",
+            "signal": "SHORT",
+            "close": 419.56,
+            "er": 0.047,
+            "quality": 26.0,
+            "active_len": 48
+          },
+          {
+            "bar": "2025-10-28 13:30",
+            "signal": "LONG",
+            "close": 464.41,
+            "er": 0.133,
+            "quality": 25.7,
+            "active_len": 45
+          },
+          {
+            "bar": "2025-11-12 13:30",
+            "signal": "SHORT",
+            "close": 433.44,
+            "er": 0.11,
+            "quality": 25.4,
+            "active_len": 46
+          },
+          {
+            "bar": "2025-12-03 15:30",
+            "signal": "LONG",
+            "close": 441.3,
+            "er": 0.414,
+            "quality": 27.1,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-12-30 17:30",
+            "signal": "SHORT",
+            "close": 458.61,
+            "er": 0.609,
+            "quality": 26.9,
+            "active_len": 29
+          }
+        ]
+      },
+      "3H": {
+        "status": "ok",
+        "bars": 1498,
+        "signals": 25,
+        "long": 12,
+        "short": 13,
+        "log": [
+          {
+            "bar": "2024-05-10 16:30",
+            "signal": "SHORT",
+            "close": 169.15,
+            "er": 0.534,
+            "quality": 27.6,
+            "active_len": 31
+          },
+          {
+            "bar": "2024-06-14 13:30",
+            "signal": "LONG",
+            "close": 178.85,
+            "er": 0.146,
+            "quality": 30.3,
+            "active_len": 45
+          },
+          {
+            "bar": "2024-07-19 13:30",
+            "signal": "SHORT",
+            "close": 238.96,
+            "er": 0.294,
+            "quality": 32.7,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-08-16 16:30",
+            "signal": "LONG",
+            "close": 216.47,
+            "er": 0.507,
+            "quality": 30.1,
+            "active_len": 32
+          },
+          {
+            "bar": "2024-08-28 16:30",
+            "signal": "SHORT",
+            "close": 205.42,
+            "er": 0.44,
+            "quality": 26.6,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-09-05 16:30",
+            "signal": "LONG",
+            "close": 229.28,
+            "er": 0.303,
+            "quality": 28.2,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-10-04 16:30",
+            "signal": "SHORT",
+            "close": 249.9,
+            "er": 0.149,
+            "quality": 33.6,
+            "active_len": 45
+          },
+          {
+            "bar": "2024-10-24 16:30",
+            "signal": "LONG",
+            "close": 259.92,
+            "er": 0.62,
+            "quality": 46.0,
+            "active_len": 28
+          },
+          {
+            "bar": "2024-12-27 19:30",
+            "signal": "SHORT",
+            "close": 431.71,
+            "er": 0.357,
+            "quality": 27.1,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-03-24 19:30",
+            "signal": "LONG",
+            "close": 278.44,
+            "er": 0.359,
+            "quality": 31.8,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-04-07 13:30",
+            "signal": "SHORT",
+            "close": 228.85,
+            "er": 0.417,
+            "quality": 29.1,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-04-25 16:30",
+            "signal": "LONG",
+            "close": 282.56,
+            "er": 0.296,
+            "quality": 28.4,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-06-05 16:30",
+            "signal": "SHORT",
+            "close": 281.75,
+            "er": 0.691,
+            "quality": 29.0,
+            "active_len": 26
+          },
+          {
+            "bar": "2025-06-23 19:30",
+            "signal": "LONG",
+            "close": 348.71,
+            "er": 0.277,
+            "quality": 26.3,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-07-01 16:30",
+            "signal": "SHORT",
+            "close": 302.89,
+            "er": 0.236,
+            "quality": 26.0,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-07-16 16:30",
+            "signal": "LONG",
+            "close": 322.03,
+            "er": 0.536,
+            "quality": 26.9,
+            "active_len": 31
+          },
+          {
+            "bar": "2025-08-01 13:30",
+            "signal": "SHORT",
+            "close": 307.18,
+            "er": 0.323,
+            "quality": 25.6,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-08-11 13:30",
+            "signal": "LONG",
+            "close": 346.39,
+            "er": 0.603,
+            "quality": 32.7,
+            "active_len": 29
+          },
+          {
+            "bar": "2025-08-21 19:30",
+            "signal": "SHORT",
+            "close": 320.04,
+            "er": 0.562,
+            "quality": 25.7,
+            "active_len": 30
+          },
+          {
+            "bar": "2025-08-26 16:30",
+            "signal": "LONG",
+            "close": 349.7,
+            "er": 0.352,
+            "quality": 26.1,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-10-10 19:30",
+            "signal": "SHORT",
+            "close": 413.3,
+            "er": 0.341,
+            "quality": 25.2,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-10-24 13:30",
+            "signal": "LONG",
+            "close": 437.43,
+            "er": 0.121,
+            "quality": 26.5,
+            "active_len": 46
+          },
+          {
+            "bar": "2025-11-13 13:30",
+            "signal": "SHORT",
+            "close": 407.08,
+            "er": 0.33,
+            "quality": 28.1,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-12-03 16:30",
+            "signal": "LONG",
+            "close": 446.97,
+            "er": 0.596,
+            "quality": 27.6,
+            "active_len": 29
+          },
+          {
+            "bar": "2025-12-30 16:30",
+            "signal": "SHORT",
+            "close": 458.61,
+            "er": 0.485,
+            "quality": 27.1,
+            "active_len": 33
           }
         ]
       },
@@ -3990,6 +6016,568 @@
           }
         ]
       },
+      "2H": {
+        "status": "ok",
+        "bars": 1996,
+        "signals": 43,
+        "long": 21,
+        "short": 22,
+        "log": [
+          {
+            "bar": "2024-05-17 13:30",
+            "signal": "SHORT",
+            "close": 184.8,
+            "er": 0.259,
+            "quality": 26.0,
+            "active_len": 41
+          },
+          {
+            "bar": "2024-06-07 13:30",
+            "signal": "LONG",
+            "close": 185.68,
+            "er": 0.679,
+            "quality": 27.6,
+            "active_len": 26
+          },
+          {
+            "bar": "2024-06-17 15:30",
+            "signal": "SHORT",
+            "close": 183.07,
+            "er": 0.29,
+            "quality": 25.6,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-06-24 13:30",
+            "signal": "LONG",
+            "close": 188.04,
+            "er": 0.428,
+            "quality": 26.2,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-07-12 13:30",
+            "signal": "SHORT",
+            "close": 195.4,
+            "er": 0.332,
+            "quality": 29.7,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-08-01 13:30",
+            "signal": "LONG",
+            "close": 186.27,
+            "er": 0.424,
+            "quality": 27.5,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-08-02 15:30",
+            "signal": "SHORT",
+            "close": 165.37,
+            "er": 0.423,
+            "quality": 28.3,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-08-14 19:30",
+            "signal": "LONG",
+            "close": 170.08,
+            "er": 0.633,
+            "quality": 25.6,
+            "active_len": 28
+          },
+          {
+            "bar": "2024-08-27 13:30",
+            "signal": "SHORT",
+            "close": 172.79,
+            "er": 0.314,
+            "quality": 27.4,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-09-11 19:30",
+            "signal": "LONG",
+            "close": 184.42,
+            "er": 0.36,
+            "quality": 25.4,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-09-30 15:30",
+            "signal": "SHORT",
+            "close": 185.62,
+            "er": 0.512,
+            "quality": 29.9,
+            "active_len": 32
+          },
+          {
+            "bar": "2024-10-10 19:30",
+            "signal": "LONG",
+            "close": 186.66,
+            "er": 0.273,
+            "quality": 27.1,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-11-18 15:30",
+            "signal": "SHORT",
+            "close": 202.49,
+            "er": 0.136,
+            "quality": 33.0,
+            "active_len": 45
+          },
+          {
+            "bar": "2024-11-27 15:30",
+            "signal": "LONG",
+            "close": 205.38,
+            "er": 0.201,
+            "quality": 25.6,
+            "active_len": 43
+          },
+          {
+            "bar": "2024-12-19 19:30",
+            "signal": "SHORT",
+            "close": 223.28,
+            "er": 0.215,
+            "quality": 29.2,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-01-21 15:30",
+            "signal": "LONG",
+            "close": 231.4,
+            "er": 0.496,
+            "quality": 29.6,
+            "active_len": 33
+          },
+          {
+            "bar": "2025-02-12 17:30",
+            "signal": "SHORT",
+            "close": 230.71,
+            "er": 0.26,
+            "quality": 25.9,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-03-25 15:30",
+            "signal": "LONG",
+            "close": 204.92,
+            "er": 0.62,
+            "quality": 28.8,
+            "active_len": 28
+          },
+          {
+            "bar": "2025-03-31 13:30",
+            "signal": "SHORT",
+            "close": 186.98,
+            "er": 0.566,
+            "quality": 32.8,
+            "active_len": 30
+          },
+          {
+            "bar": "2025-04-14 19:30",
+            "signal": "LONG",
+            "close": 182.09,
+            "er": 0.12,
+            "quality": 25.0,
+            "active_len": 46
+          },
+          {
+            "bar": "2025-04-16 17:30",
+            "signal": "SHORT",
+            "close": 171.63,
+            "er": 0.356,
+            "quality": 27.5,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-04-24 15:30",
+            "signal": "LONG",
+            "close": 185.3,
+            "er": 0.185,
+            "quality": 31.5,
+            "active_len": 44
+          },
+          {
+            "bar": "2025-05-20 19:30",
+            "signal": "SHORT",
+            "close": 204.13,
+            "er": 0.517,
+            "quality": 25.3,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-06-05 15:30",
+            "signal": "LONG",
+            "close": 210.88,
+            "er": 0.299,
+            "quality": 25.2,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-08-01 15:30",
+            "signal": "SHORT",
+            "close": 214.34,
+            "er": 0.551,
+            "quality": 31.7,
+            "active_len": 31
+          },
+          {
+            "bar": "2025-08-08 19:30",
+            "signal": "LONG",
+            "close": 222.69,
+            "er": 0.354,
+            "quality": 26.3,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-08-21 15:30",
+            "signal": "SHORT",
+            "close": 220.95,
+            "er": 0.513,
+            "quality": 33.9,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-08-28 19:30",
+            "signal": "LONG",
+            "close": 231.56,
+            "er": 0.743,
+            "quality": 26.2,
+            "active_len": 24
+          },
+          {
+            "bar": "2025-09-03 15:30",
+            "signal": "SHORT",
+            "close": 225.62,
+            "er": 0.159,
+            "quality": 25.7,
+            "active_len": 44
+          },
+          {
+            "bar": "2025-09-04 19:30",
+            "signal": "LONG",
+            "close": 235.69,
+            "er": 0.257,
+            "quality": 28.9,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-09-12 17:30",
+            "signal": "SHORT",
+            "close": 227.76,
+            "er": 0.263,
+            "quality": 25.1,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-10-24 15:30",
+            "signal": "LONG",
+            "close": 224.84,
+            "er": 0.568,
+            "quality": 25.0,
+            "active_len": 30
+          },
+          {
+            "bar": "2025-11-14 15:30",
+            "signal": "SHORT",
+            "close": 237.56,
+            "er": 0.072,
+            "quality": 26.4,
+            "active_len": 47
+          },
+          {
+            "bar": "2025-11-26 15:30",
+            "signal": "LONG",
+            "close": 230.88,
+            "er": 0.307,
+            "quality": 25.1,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-12-15 17:30",
+            "signal": "SHORT",
+            "close": 223.22,
+            "er": 0.271,
+            "quality": 27.3,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-12-23 15:30",
+            "signal": "LONG",
+            "close": 231.39,
+            "er": 0.48,
+            "quality": 26.9,
+            "active_len": 33
+          },
+          {
+            "bar": "2026-01-02 19:30",
+            "signal": "SHORT",
+            "close": 226.5,
+            "er": 0.516,
+            "quality": 25.5,
+            "active_len": 32
+          },
+          {
+            "bar": "2026-01-06 17:30",
+            "signal": "LONG",
+            "close": 241.18,
+            "er": 0.406,
+            "quality": 27.0,
+            "active_len": 36
+          },
+          {
+            "bar": "2026-01-15 13:30",
+            "signal": "SHORT",
+            "close": 237.75,
+            "er": 0.319,
+            "quality": 28.6,
+            "active_len": 39
+          },
+          {
+            "bar": "2026-01-27 19:30",
+            "signal": "LONG",
+            "close": 244.68,
+            "er": 0.646,
+            "quality": 25.7,
+            "active_len": 27
+          },
+          {
+            "bar": "2026-02-05 13:30",
+            "signal": "SHORT",
+            "close": 222.27,
+            "er": 0.467,
+            "quality": 27.8,
+            "active_len": 34
+          },
+          {
+            "bar": "2026-02-20 19:30",
+            "signal": "LONG",
+            "close": 210.18,
+            "er": 0.545,
+            "quality": 29.9,
+            "active_len": 31
+          },
+          {
+            "bar": "2026-03-20 15:30",
+            "signal": "SHORT",
+            "close": 206.68,
+            "er": 0.032,
+            "quality": 26.6,
+            "active_len": 49
+          }
+        ]
+      },
+      "3H": {
+        "status": "ok",
+        "bars": 1498,
+        "signals": 25,
+        "long": 12,
+        "short": 13,
+        "log": [
+          {
+            "bar": "2024-05-31 16:30",
+            "signal": "SHORT",
+            "close": 174.65,
+            "er": 0.447,
+            "quality": 26.9,
+            "active_len": 34
+          },
+          {
+            "bar": "2024-06-10 13:30",
+            "signal": "LONG",
+            "close": 186.35,
+            "er": 0.353,
+            "quality": 26.6,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-07-15 16:30",
+            "signal": "SHORT",
+            "close": 192.78,
+            "er": 0.348,
+            "quality": 28.3,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-08-15 16:30",
+            "signal": "LONG",
+            "close": 177.64,
+            "er": 0.602,
+            "quality": 26.7,
+            "active_len": 29
+          },
+          {
+            "bar": "2024-08-28 13:30",
+            "signal": "SHORT",
+            "close": 170.4,
+            "er": 0.436,
+            "quality": 26.3,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-09-12 13:30",
+            "signal": "LONG",
+            "close": 184.91,
+            "er": 0.284,
+            "quality": 28.4,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-10-01 16:30",
+            "signal": "SHORT",
+            "close": 185.84,
+            "er": 0.357,
+            "quality": 31.3,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-10-11 19:30",
+            "signal": "LONG",
+            "close": 188.8,
+            "er": 0.333,
+            "quality": 28.2,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-11-19 19:30",
+            "signal": "SHORT",
+            "close": 204.6,
+            "er": 0.116,
+            "quality": 26.1,
+            "active_len": 46
+          },
+          {
+            "bar": "2024-12-02 16:30",
+            "signal": "LONG",
+            "close": 210.07,
+            "er": 0.359,
+            "quality": 25.1,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-12-20 16:30",
+            "signal": "SHORT",
+            "close": 225.28,
+            "er": 0.188,
+            "quality": 34.6,
+            "active_len": 43
+          },
+          {
+            "bar": "2025-01-21 19:30",
+            "signal": "LONG",
+            "close": 230.7,
+            "er": 0.485,
+            "quality": 27.1,
+            "active_len": 33
+          },
+          {
+            "bar": "2025-02-14 13:30",
+            "signal": "SHORT",
+            "close": 228.73,
+            "er": 0.306,
+            "quality": 25.1,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-03-25 16:30",
+            "signal": "LONG",
+            "close": 205.21,
+            "er": 0.271,
+            "quality": 25.1,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-03-31 16:30",
+            "signal": "SHORT",
+            "close": 189.43,
+            "er": 0.164,
+            "quality": 25.4,
+            "active_len": 44
+          },
+          {
+            "bar": "2025-04-25 13:30",
+            "signal": "LONG",
+            "close": 187.55,
+            "er": 0.176,
+            "quality": 31.2,
+            "active_len": 44
+          },
+          {
+            "bar": "2025-08-01 19:30",
+            "signal": "SHORT",
+            "close": 214.81,
+            "er": 0.525,
+            "quality": 33.7,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-08-14 13:30",
+            "signal": "LONG",
+            "close": 230.46,
+            "er": 0.639,
+            "quality": 27.7,
+            "active_len": 28
+          },
+          {
+            "bar": "2025-09-23 19:30",
+            "signal": "SHORT",
+            "close": 220.74,
+            "er": 0.452,
+            "quality": 29.9,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-10-27 13:30",
+            "signal": "LONG",
+            "close": 227.31,
+            "er": 0.522,
+            "quality": 29.1,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-11-14 19:30",
+            "signal": "SHORT",
+            "close": 234.7,
+            "er": 0.373,
+            "quality": 26.0,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-12-01 13:30",
+            "signal": "LONG",
+            "close": 233.97,
+            "er": 0.419,
+            "quality": 25.8,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-12-16 13:30",
+            "signal": "SHORT",
+            "close": 222.75,
+            "er": 0.388,
+            "quality": 27.4,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-12-23 19:30",
+            "signal": "LONG",
+            "close": 232.12,
+            "er": 0.346,
+            "quality": 25.7,
+            "active_len": 38
+          },
+          {
+            "bar": "2026-01-20 19:30",
+            "signal": "SHORT",
+            "close": 231.11,
+            "er": 0.575,
+            "quality": 26.2,
+            "active_len": 30
+          }
+        ]
+      },
       "4H": {
         "status": "ok",
         "bars": 998,
@@ -4779,6 +7367,552 @@
           }
         ]
       },
+      "2H": {
+        "status": "ok",
+        "bars": 1996,
+        "signals": 38,
+        "long": 19,
+        "short": 19,
+        "log": [
+          {
+            "bar": "2024-05-23 19:30",
+            "signal": "SHORT",
+            "close": 215.71,
+            "er": 0.296,
+            "quality": 38.4,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-07-03 13:30",
+            "signal": "LONG",
+            "close": 218.53,
+            "er": 0.687,
+            "quality": 27.5,
+            "active_len": 26
+          },
+          {
+            "bar": "2024-07-22 15:30",
+            "signal": "SHORT",
+            "close": 221.28,
+            "er": 0.25,
+            "quality": 35.3,
+            "active_len": 41
+          },
+          {
+            "bar": "2024-08-01 13:30",
+            "signal": "LONG",
+            "close": 226.17,
+            "er": 0.756,
+            "quality": 30.6,
+            "active_len": 24
+          },
+          {
+            "bar": "2024-09-04 13:30",
+            "signal": "SHORT",
+            "close": 230.62,
+            "er": 0.2,
+            "quality": 26.6,
+            "active_len": 43
+          },
+          {
+            "bar": "2024-09-12 13:30",
+            "signal": "LONG",
+            "close": 235.93,
+            "er": 0.388,
+            "quality": 25.9,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-10-09 13:30",
+            "signal": "SHORT",
+            "close": 241.37,
+            "er": 0.371,
+            "quality": 25.2,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-10-15 15:30",
+            "signal": "LONG",
+            "close": 245.93,
+            "er": 0.495,
+            "quality": 25.4,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-11-06 13:30",
+            "signal": "SHORT",
+            "close": 246.42,
+            "er": 0.638,
+            "quality": 27.3,
+            "active_len": 28
+          },
+          {
+            "bar": "2024-11-20 15:30",
+            "signal": "LONG",
+            "close": 244.73,
+            "er": 0.482,
+            "quality": 30.6,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-11-29 15:30",
+            "signal": "SHORT",
+            "close": 245.43,
+            "er": 0.043,
+            "quality": 25.1,
+            "active_len": 48
+          },
+          {
+            "bar": "2024-12-10 17:30",
+            "signal": "LONG",
+            "close": 248.56,
+            "er": 0.354,
+            "quality": 26.7,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-12-17 13:30",
+            "signal": "SHORT",
+            "close": 243.78,
+            "er": 0.365,
+            "quality": 26.0,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-01-02 19:30",
+            "signal": "LONG",
+            "close": 245.45,
+            "er": 0.363,
+            "quality": 26.0,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-02-27 13:30",
+            "signal": "SHORT",
+            "close": 265.2,
+            "er": 0.356,
+            "quality": 28.5,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-03-13 17:30",
+            "signal": "LONG",
+            "close": 275.13,
+            "er": 0.407,
+            "quality": 29.7,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-04-04 19:30",
+            "signal": "SHORT",
+            "close": 279.91,
+            "er": 0.227,
+            "quality": 35.9,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-04-10 19:30",
+            "signal": "LONG",
+            "close": 292.31,
+            "er": 0.156,
+            "quality": 28.7,
+            "active_len": 45
+          },
+          {
+            "bar": "2025-05-01 19:30",
+            "signal": "SHORT",
+            "close": 297.48,
+            "er": 0.365,
+            "quality": 26.1,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-05-06 17:30",
+            "signal": "LONG",
+            "close": 314.79,
+            "er": 0.256,
+            "quality": 26.5,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-05-12 19:30",
+            "signal": "SHORT",
+            "close": 298.16,
+            "er": 0.255,
+            "quality": 27.9,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-05-21 15:30",
+            "signal": "LONG",
+            "close": 305.14,
+            "er": 0.513,
+            "quality": 27.4,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-06-24 17:30",
+            "signal": "SHORT",
+            "close": 305.76,
+            "er": 0.457,
+            "quality": 25.3,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-07-21 13:30",
+            "signal": "LONG",
+            "close": 313.15,
+            "er": 0.297,
+            "quality": 26.5,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-07-28 13:30",
+            "signal": "SHORT",
+            "close": 305.16,
+            "er": 0.47,
+            "quality": 31.0,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-08-04 17:30",
+            "signal": "LONG",
+            "close": 310.92,
+            "er": 0.313,
+            "quality": 30.4,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-08-12 19:30",
+            "signal": "SHORT",
+            "close": 308.24,
+            "er": 0.274,
+            "quality": 29.2,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-08-22 19:30",
+            "signal": "LONG",
+            "close": 310.55,
+            "er": 0.317,
+            "quality": 27.0,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-10-22 17:30",
+            "signal": "SHORT",
+            "close": 377.7,
+            "er": 0.162,
+            "quality": 32.8,
+            "active_len": 44
+          },
+          {
+            "bar": "2025-11-10 19:30",
+            "signal": "LONG",
+            "close": 378.34,
+            "er": 0.336,
+            "quality": 26.5,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-11-18 13:30",
+            "signal": "SHORT",
+            "close": 373.91,
+            "er": 0.126,
+            "quality": 29.5,
+            "active_len": 46
+          },
+          {
+            "bar": "2025-11-28 13:30",
+            "signal": "LONG",
+            "close": 386.05,
+            "er": 0.463,
+            "quality": 26.4,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-12-31 13:30",
+            "signal": "SHORT",
+            "close": 398.64,
+            "er": 0.225,
+            "quality": 28.0,
+            "active_len": 42
+          },
+          {
+            "bar": "2026-01-06 17:30",
+            "signal": "LONG",
+            "close": 411.99,
+            "er": 0.47,
+            "quality": 26.1,
+            "active_len": 34
+          },
+          {
+            "bar": "2026-02-02 15:30",
+            "signal": "SHORT",
+            "close": 429.05,
+            "er": 0.331,
+            "quality": 35.3,
+            "active_len": 38
+          },
+          {
+            "bar": "2026-02-23 15:30",
+            "signal": "LONG",
+            "close": 478.83,
+            "er": 0.322,
+            "quality": 28.9,
+            "active_len": 39
+          },
+          {
+            "bar": "2026-03-13 15:30",
+            "signal": "SHORT",
+            "close": 464.46,
+            "er": 0.228,
+            "quality": 25.3,
+            "active_len": 42
+          },
+          {
+            "bar": "2026-03-31 15:30",
+            "signal": "LONG",
+            "close": 426.98,
+            "er": 0.342,
+            "quality": 35.1,
+            "active_len": 38
+          }
+        ]
+      },
+      "3H": {
+        "status": "ok",
+        "bars": 1498,
+        "signals": 28,
+        "long": 14,
+        "short": 14,
+        "log": [
+          {
+            "bar": "2024-05-29 19:30",
+            "signal": "SHORT",
+            "close": 216.16,
+            "er": 0.498,
+            "quality": 25.7,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-07-05 16:30",
+            "signal": "LONG",
+            "close": 221.1,
+            "er": 0.52,
+            "quality": 31.6,
+            "active_len": 32
+          },
+          {
+            "bar": "2024-07-24 19:30",
+            "signal": "SHORT",
+            "close": 221.76,
+            "er": 0.346,
+            "quality": 25.7,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-08-02 13:30",
+            "signal": "LONG",
+            "close": 225.22,
+            "er": 0.179,
+            "quality": 27.0,
+            "active_len": 44
+          },
+          {
+            "bar": "2024-11-06 13:30",
+            "signal": "SHORT",
+            "close": 246.4,
+            "er": 0.397,
+            "quality": 26.3,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-11-21 16:30",
+            "signal": "LONG",
+            "close": 246.61,
+            "er": 0.443,
+            "quality": 28.5,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-12-18 19:30",
+            "signal": "SHORT",
+            "close": 239.3,
+            "er": 0.505,
+            "quality": 29.2,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-01-10 13:30",
+            "signal": "LONG",
+            "close": 248.13,
+            "er": 0.559,
+            "quality": 25.8,
+            "active_len": 30
+          },
+          {
+            "bar": "2025-02-27 19:30",
+            "signal": "SHORT",
+            "close": 264.98,
+            "er": 0.337,
+            "quality": 29.6,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-03-13 13:30",
+            "signal": "LONG",
+            "close": 274.72,
+            "er": 0.364,
+            "quality": 26.3,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-04-07 19:30",
+            "signal": "SHORT",
+            "close": 273.89,
+            "er": 0.422,
+            "quality": 36.2,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-04-11 13:30",
+            "signal": "LONG",
+            "close": 298.23,
+            "er": 0.224,
+            "quality": 26.8,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-05-14 13:30",
+            "signal": "SHORT",
+            "close": 293.4,
+            "er": 0.32,
+            "quality": 26.4,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-05-23 16:30",
+            "signal": "LONG",
+            "close": 310.04,
+            "er": 0.532,
+            "quality": 26.2,
+            "active_len": 31
+          },
+          {
+            "bar": "2025-06-26 16:30",
+            "signal": "SHORT",
+            "close": 306.77,
+            "er": 0.309,
+            "quality": 25.3,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-07-21 19:30",
+            "signal": "LONG",
+            "close": 313.07,
+            "er": 0.258,
+            "quality": 25.8,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-07-28 19:30",
+            "signal": "SHORT",
+            "close": 305.47,
+            "er": 0.168,
+            "quality": 26.2,
+            "active_len": 44
+          },
+          {
+            "bar": "2025-08-05 16:30",
+            "signal": "LONG",
+            "close": 311.23,
+            "er": 0.189,
+            "quality": 25.7,
+            "active_len": 43
+          },
+          {
+            "bar": "2025-08-15 13:30",
+            "signal": "SHORT",
+            "close": 307.4,
+            "er": 0.25,
+            "quality": 25.1,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-08-26 13:30",
+            "signal": "LONG",
+            "close": 311.62,
+            "er": 0.361,
+            "quality": 25.7,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-10-24 16:30",
+            "signal": "SHORT",
+            "close": 378.42,
+            "er": 0.117,
+            "quality": 25.6,
+            "active_len": 46
+          },
+          {
+            "bar": "2025-11-11 16:30",
+            "signal": "LONG",
+            "close": 378.79,
+            "er": 0.404,
+            "quality": 26.2,
+            "active_len": 36
+          },
+          {
+            "bar": "2026-01-02 13:30",
+            "signal": "SHORT",
+            "close": 397.39,
+            "er": 0.194,
+            "quality": 31.6,
+            "active_len": 43
+          },
+          {
+            "bar": "2026-01-07 13:30",
+            "signal": "LONG",
+            "close": 409.85,
+            "er": 0.15,
+            "quality": 29.7,
+            "active_len": 45
+          },
+          {
+            "bar": "2026-02-03 16:30",
+            "signal": "SHORT",
+            "close": 453.12,
+            "er": 0.03,
+            "quality": 30.3,
+            "active_len": 49
+          },
+          {
+            "bar": "2026-02-23 19:30",
+            "signal": "LONG",
+            "close": 481.31,
+            "er": 0.427,
+            "quality": 26.8,
+            "active_len": 35
+          },
+          {
+            "bar": "2026-03-16 16:30",
+            "signal": "SHORT",
+            "close": 460.24,
+            "er": 0.142,
+            "quality": 26.5,
+            "active_len": 45
+          },
+          {
+            "bar": "2026-04-01 13:30",
+            "signal": "LONG",
+            "close": 438.61,
+            "er": 0.437,
+            "quality": 38.5,
+            "active_len": 35
+          }
+        ]
+      },
       "4H": {
         "status": "ok",
         "bars": 998,
@@ -5517,6 +8651,560 @@
             "er": 0.467,
             "quality": 29.0,
             "active_len": 34
+          }
+        ]
+      },
+      "2H": {
+        "status": "ok",
+        "bars": 1996,
+        "signals": 36,
+        "long": 18,
+        "short": 18,
+        "log": [
+          {
+            "bar": "2024-05-02 15:30",
+            "signal": "SHORT",
+            "close": 46.45,
+            "er": 0.399,
+            "quality": 36.4,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-06-21 15:30",
+            "signal": "LONG",
+            "close": 45.04,
+            "er": 0.243,
+            "quality": 34.1,
+            "active_len": 42
+          },
+          {
+            "bar": "2024-07-09 13:30",
+            "signal": "SHORT",
+            "close": 44.63,
+            "er": 0.413,
+            "quality": 25.0,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-07-15 15:30",
+            "signal": "LONG",
+            "close": 46.13,
+            "er": 0.567,
+            "quality": 30.1,
+            "active_len": 30
+          },
+          {
+            "bar": "2024-07-23 17:30",
+            "signal": "SHORT",
+            "close": 45.26,
+            "er": 0.267,
+            "quality": 28.1,
+            "active_len": 41
+          },
+          {
+            "bar": "2024-07-31 17:30",
+            "signal": "LONG",
+            "close": 46.74,
+            "er": 0.405,
+            "quality": 25.7,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-08-02 15:30",
+            "signal": "SHORT",
+            "close": 43.91,
+            "er": 0.39,
+            "quality": 27.3,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-08-26 19:30",
+            "signal": "LONG",
+            "close": 45.62,
+            "er": 0.03,
+            "quality": 27.0,
+            "active_len": 49
+          },
+          {
+            "bar": "2024-09-04 15:30",
+            "signal": "SHORT",
+            "close": 44.08,
+            "er": 0.323,
+            "quality": 27.4,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-09-17 15:30",
+            "signal": "LONG",
+            "close": 43.76,
+            "er": 0.443,
+            "quality": 27.6,
+            "active_len": 34
+          },
+          {
+            "bar": "2024-09-26 15:30",
+            "signal": "SHORT",
+            "close": 42.83,
+            "er": 0.562,
+            "quality": 29.8,
+            "active_len": 30
+          },
+          {
+            "bar": "2024-10-02 13:30",
+            "signal": "LONG",
+            "close": 45.04,
+            "er": 0.249,
+            "quality": 25.8,
+            "active_len": 41
+          },
+          {
+            "bar": "2024-10-15 19:30",
+            "signal": "SHORT",
+            "close": 44.91,
+            "er": 0.19,
+            "quality": 27.4,
+            "active_len": 43
+          },
+          {
+            "bar": "2024-11-05 17:30",
+            "signal": "LONG",
+            "close": 44.9,
+            "er": 0.315,
+            "quality": 25.0,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-12-04 17:30",
+            "signal": "SHORT",
+            "close": 46.0,
+            "er": 0.478,
+            "quality": 27.9,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-12-31 15:30",
+            "signal": "LONG",
+            "close": 42.71,
+            "er": 0.231,
+            "quality": 27.9,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-01-24 19:30",
+            "signal": "SHORT",
+            "close": 45.65,
+            "er": 0.321,
+            "quality": 25.3,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-02-19 13:30",
+            "signal": "LONG",
+            "close": 46.42,
+            "er": 0.207,
+            "quality": 26.4,
+            "active_len": 43
+          },
+          {
+            "bar": "2025-02-25 19:30",
+            "signal": "SHORT",
+            "close": 44.81,
+            "er": 0.249,
+            "quality": 26.3,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-03-17 17:30",
+            "signal": "LONG",
+            "close": 45.73,
+            "er": 0.461,
+            "quality": 26.3,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-04-03 17:30",
+            "signal": "SHORT",
+            "close": 43.69,
+            "er": 0.51,
+            "quality": 25.7,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-04-24 17:30",
+            "signal": "LONG",
+            "close": 41.15,
+            "er": 0.228,
+            "quality": 26.1,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-05-21 13:30",
+            "signal": "SHORT",
+            "close": 41.41,
+            "er": 0.405,
+            "quality": 28.2,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-06-03 19:30",
+            "signal": "LONG",
+            "close": 41.78,
+            "er": 0.175,
+            "quality": 25.4,
+            "active_len": 44
+          },
+          {
+            "bar": "2025-06-24 15:30",
+            "signal": "SHORT",
+            "close": 42.47,
+            "er": 0.346,
+            "quality": 41.3,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-07-03 13:30",
+            "signal": "LONG",
+            "close": 43.54,
+            "er": 0.419,
+            "quality": 25.2,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-07-16 15:30",
+            "signal": "SHORT",
+            "close": 43.27,
+            "er": 0.379,
+            "quality": 25.3,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-07-28 17:30",
+            "signal": "LONG",
+            "close": 43.96,
+            "er": 0.658,
+            "quality": 25.7,
+            "active_len": 27
+          },
+          {
+            "bar": "2025-08-04 13:30",
+            "signal": "SHORT",
+            "close": 42.85,
+            "er": 0.488,
+            "quality": 26.8,
+            "active_len": 33
+          },
+          {
+            "bar": "2025-08-22 13:30",
+            "signal": "LONG",
+            "close": 43.94,
+            "er": 0.332,
+            "quality": 25.0,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-09-05 17:30",
+            "signal": "SHORT",
+            "close": 43.64,
+            "er": 0.385,
+            "quality": 26.5,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-09-17 15:30",
+            "signal": "LONG",
+            "close": 45.0,
+            "er": 0.357,
+            "quality": 26.7,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-10-10 13:30",
+            "signal": "SHORT",
+            "close": 43.26,
+            "er": 0.434,
+            "quality": 25.7,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-10-23 17:30",
+            "signal": "LONG",
+            "close": 44.67,
+            "er": 0.767,
+            "quality": 26.7,
+            "active_len": 23
+          },
+          {
+            "bar": "2025-12-16 13:30",
+            "signal": "SHORT",
+            "close": 44.06,
+            "er": 0.473,
+            "quality": 26.6,
+            "active_len": 33
+          },
+          {
+            "bar": "2026-01-02 17:30",
+            "signal": "LONG",
+            "close": 45.65,
+            "er": 0.389,
+            "quality": 27.3,
+            "active_len": 36
+          }
+        ]
+      },
+      "3H": {
+        "status": "ok",
+        "bars": 1498,
+        "signals": 31,
+        "long": 15,
+        "short": 16,
+        "log": [
+          {
+            "bar": "2024-05-28 13:30",
+            "signal": "SHORT",
+            "close": 46.13,
+            "er": 0.229,
+            "quality": 41.6,
+            "active_len": 42
+          },
+          {
+            "bar": "2024-06-24 19:30",
+            "signal": "LONG",
+            "close": 45.65,
+            "er": 0.379,
+            "quality": 32.8,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-07-08 19:30",
+            "signal": "SHORT",
+            "close": 44.79,
+            "er": 0.189,
+            "quality": 27.2,
+            "active_len": 43
+          },
+          {
+            "bar": "2024-07-15 19:30",
+            "signal": "LONG",
+            "close": 45.97,
+            "er": 0.273,
+            "quality": 28.1,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-08-02 19:30",
+            "signal": "SHORT",
+            "close": 44.19,
+            "er": 0.254,
+            "quality": 26.1,
+            "active_len": 41
+          },
+          {
+            "bar": "2024-09-18 19:30",
+            "signal": "LONG",
+            "close": 43.97,
+            "er": 0.343,
+            "quality": 29.5,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-10-16 13:30",
+            "signal": "SHORT",
+            "close": 45.08,
+            "er": 0.413,
+            "quality": 26.3,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-11-06 16:30",
+            "signal": "LONG",
+            "close": 47.01,
+            "er": 0.436,
+            "quality": 29.2,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-12-04 19:30",
+            "signal": "SHORT",
+            "close": 46.14,
+            "er": 0.663,
+            "quality": 27.2,
+            "active_len": 27
+          },
+          {
+            "bar": "2025-01-02 13:30",
+            "signal": "LONG",
+            "close": 43.42,
+            "er": 0.456,
+            "quality": 34.2,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-01-27 19:30",
+            "signal": "SHORT",
+            "close": 45.2,
+            "er": 0.391,
+            "quality": 29.4,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-02-19 19:30",
+            "signal": "LONG",
+            "close": 46.0,
+            "er": 0.231,
+            "quality": 25.4,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-02-26 19:30",
+            "signal": "SHORT",
+            "close": 44.59,
+            "er": 0.21,
+            "quality": 25.7,
+            "active_len": 43
+          },
+          {
+            "bar": "2025-03-17 19:30",
+            "signal": "LONG",
+            "close": 45.58,
+            "er": 0.495,
+            "quality": 25.1,
+            "active_len": 33
+          },
+          {
+            "bar": "2025-04-03 19:30",
+            "signal": "SHORT",
+            "close": 43.4,
+            "er": 0.612,
+            "quality": 26.6,
+            "active_len": 29
+          },
+          {
+            "bar": "2025-05-12 16:30",
+            "signal": "LONG",
+            "close": 42.28,
+            "er": 0.406,
+            "quality": 28.0,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-05-22 13:30",
+            "signal": "SHORT",
+            "close": 40.81,
+            "er": 0.654,
+            "quality": 32.9,
+            "active_len": 27
+          },
+          {
+            "bar": "2025-06-09 19:30",
+            "signal": "LONG",
+            "close": 41.78,
+            "er": 0.323,
+            "quality": 25.2,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-06-25 13:30",
+            "signal": "SHORT",
+            "close": 42.55,
+            "er": 0.393,
+            "quality": 33.6,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-07-09 13:30",
+            "signal": "LONG",
+            "close": 44.1,
+            "er": 0.34,
+            "quality": 25.1,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-07-17 16:30",
+            "signal": "SHORT",
+            "close": 43.31,
+            "er": 0.381,
+            "quality": 29.2,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-07-29 13:30",
+            "signal": "LONG",
+            "close": 44.12,
+            "er": 0.467,
+            "quality": 27.2,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-08-04 19:30",
+            "signal": "SHORT",
+            "close": 42.7,
+            "er": 0.316,
+            "quality": 25.7,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-08-22 16:30",
+            "signal": "LONG",
+            "close": 44.08,
+            "er": 0.438,
+            "quality": 27.8,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-09-08 13:30",
+            "signal": "SHORT",
+            "close": 43.47,
+            "er": 0.328,
+            "quality": 26.4,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-09-25 13:30",
+            "signal": "LONG",
+            "close": 45.47,
+            "er": 0.144,
+            "quality": 28.9,
+            "active_len": 45
+          },
+          {
+            "bar": "2025-10-10 13:30",
+            "signal": "SHORT",
+            "close": 43.17,
+            "er": 0.403,
+            "quality": 27.5,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-11-11 13:30",
+            "signal": "LONG",
+            "close": 45.92,
+            "er": 0.408,
+            "quality": 29.5,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-12-16 16:30",
+            "signal": "SHORT",
+            "close": 43.87,
+            "er": 0.508,
+            "quality": 26.4,
+            "active_len": 32
+          },
+          {
+            "bar": "2026-01-05 13:30",
+            "signal": "LONG",
+            "close": 46.65,
+            "er": 0.59,
+            "quality": 27.5,
+            "active_len": 29
+          },
+          {
+            "bar": "2026-04-02 19:30",
+            "signal": "SHORT",
+            "close": 59.26,
+            "er": 0.165,
+            "quality": 25.4,
+            "active_len": 44
           }
         ]
       },
@@ -6493,6 +10181,648 @@
           }
         ]
       },
+      "2H": {
+        "status": "ok",
+        "bars": 1996,
+        "signals": 48,
+        "long": 24,
+        "short": 24,
+        "log": [
+          {
+            "bar": "2024-04-19 19:30",
+            "signal": "SHORT",
+            "close": 146.53,
+            "er": 0.65,
+            "quality": 53.0,
+            "active_len": 27
+          },
+          {
+            "bar": "2024-04-29 15:30",
+            "signal": "LONG",
+            "close": 160.7,
+            "er": 0.555,
+            "quality": 25.8,
+            "active_len": 31
+          },
+          {
+            "bar": "2024-05-02 17:30",
+            "signal": "SHORT",
+            "close": 146.15,
+            "er": 0.256,
+            "quality": 37.3,
+            "active_len": 41
+          },
+          {
+            "bar": "2024-05-15 19:30",
+            "signal": "LONG",
+            "close": 159.66,
+            "er": 0.407,
+            "quality": 39.1,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-06-03 19:30",
+            "signal": "SHORT",
+            "close": 163.63,
+            "er": 0.104,
+            "quality": 27.4,
+            "active_len": 46
+          },
+          {
+            "bar": "2024-06-07 15:30",
+            "signal": "LONG",
+            "close": 168.55,
+            "er": 0.283,
+            "quality": 31.3,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-06-11 13:30",
+            "signal": "SHORT",
+            "close": 158.64,
+            "er": 0.14,
+            "quality": 28.1,
+            "active_len": 45
+          },
+          {
+            "bar": "2024-07-05 13:30",
+            "signal": "LONG",
+            "close": 170.74,
+            "er": 0.48,
+            "quality": 31.8,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-07-17 15:30",
+            "signal": "SHORT",
+            "close": 162.88,
+            "er": 0.508,
+            "quality": 38.7,
+            "active_len": 32
+          },
+          {
+            "bar": "2024-08-15 15:30",
+            "signal": "LONG",
+            "close": 146.87,
+            "er": 0.617,
+            "quality": 26.0,
+            "active_len": 28
+          },
+          {
+            "bar": "2024-09-05 15:30",
+            "signal": "SHORT",
+            "close": 138.98,
+            "er": 0.272,
+            "quality": 25.1,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-09-12 13:30",
+            "signal": "LONG",
+            "close": 149.21,
+            "er": 0.438,
+            "quality": 27.1,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-10-15 13:30",
+            "signal": "SHORT",
+            "close": 157.87,
+            "er": 0.476,
+            "quality": 25.7,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-10-29 13:30",
+            "signal": "LONG",
+            "close": 163.32,
+            "er": 0.393,
+            "quality": 26.3,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-10-31 15:30",
+            "signal": "SHORT",
+            "close": 144.57,
+            "er": 0.22,
+            "quality": 26.5,
+            "active_len": 42
+          },
+          {
+            "bar": "2024-11-08 17:30",
+            "signal": "LONG",
+            "close": 148.41,
+            "er": 0.413,
+            "quality": 25.3,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-11-15 13:30",
+            "signal": "SHORT",
+            "close": 135.91,
+            "er": 0.699,
+            "quality": 25.6,
+            "active_len": 26
+          },
+          {
+            "bar": "2024-12-03 19:30",
+            "signal": "LONG",
+            "close": 142.0,
+            "er": 0.058,
+            "quality": 25.2,
+            "active_len": 48
+          },
+          {
+            "bar": "2024-12-09 15:30",
+            "signal": "SHORT",
+            "close": 132.74,
+            "er": 0.569,
+            "quality": 28.3,
+            "active_len": 30
+          },
+          {
+            "bar": "2025-01-06 17:30",
+            "signal": "LONG",
+            "close": 129.48,
+            "er": 0.258,
+            "quality": 25.3,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-01-10 15:30",
+            "signal": "SHORT",
+            "close": 115.17,
+            "er": 0.199,
+            "quality": 26.3,
+            "active_len": 43
+          },
+          {
+            "bar": "2025-01-21 17:30",
+            "signal": "LONG",
+            "close": 123.11,
+            "er": 0.496,
+            "quality": 26.3,
+            "active_len": 33
+          },
+          {
+            "bar": "2025-01-27 19:30",
+            "signal": "SHORT",
+            "close": 115.06,
+            "er": 0.376,
+            "quality": 29.8,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-02-19 19:30",
+            "signal": "LONG",
+            "close": 114.67,
+            "er": 0.312,
+            "quality": 26.3,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-02-24 19:30",
+            "signal": "SHORT",
+            "close": 108.12,
+            "er": 0.361,
+            "quality": 26.6,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-03-17 15:30",
+            "signal": "LONG",
+            "close": 104.7,
+            "er": 0.362,
+            "quality": 25.3,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-03-28 19:30",
+            "signal": "SHORT",
+            "close": 103.22,
+            "er": 0.142,
+            "quality": 28.0,
+            "active_len": 45
+          },
+          {
+            "bar": "2025-04-14 13:30",
+            "signal": "LONG",
+            "close": 94.5,
+            "er": 0.249,
+            "quality": 28.7,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-04-21 15:30",
+            "signal": "SHORT",
+            "close": 83.95,
+            "er": 0.412,
+            "quality": 25.3,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-04-24 17:30",
+            "signal": "LONG",
+            "close": 93.67,
+            "er": 0.415,
+            "quality": 28.2,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-05-23 15:30",
+            "signal": "SHORT",
+            "close": 110.58,
+            "er": 0.456,
+            "quality": 25.3,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-06-04 15:30",
+            "signal": "LONG",
+            "close": 119.04,
+            "er": 0.283,
+            "quality": 26.7,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-07-03 15:30",
+            "signal": "SHORT",
+            "close": 137.88,
+            "er": 0.33,
+            "quality": 29.4,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-07-10 17:30",
+            "signal": "LONG",
+            "close": 143.34,
+            "er": 0.364,
+            "quality": 31.6,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-08-06 13:30",
+            "signal": "SHORT",
+            "close": 160.87,
+            "er": 0.39,
+            "quality": 25.1,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-08-14 17:30",
+            "signal": "LONG",
+            "close": 180.64,
+            "er": 0.338,
+            "quality": 26.1,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-08-19 19:30",
+            "signal": "SHORT",
+            "close": 166.56,
+            "er": 0.273,
+            "quality": 28.6,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-10-02 13:30",
+            "signal": "LONG",
+            "close": 168.41,
+            "er": 0.51,
+            "quality": 26.1,
+            "active_len": 32
+          },
+          {
+            "bar": "2025-11-06 15:30",
+            "signal": "SHORT",
+            "close": 237.62,
+            "er": 0.382,
+            "quality": 25.5,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-12-09 15:30",
+            "signal": "LONG",
+            "close": 222.72,
+            "er": 0.14,
+            "quality": 25.3,
+            "active_len": 45
+          },
+          {
+            "bar": "2025-12-15 13:30",
+            "signal": "SHORT",
+            "close": 209.65,
+            "er": 0.264,
+            "quality": 26.2,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-12-23 15:30",
+            "signal": "LONG",
+            "close": 215.18,
+            "er": 0.189,
+            "quality": 25.1,
+            "active_len": 43
+          },
+          {
+            "bar": "2026-01-08 15:30",
+            "signal": "SHORT",
+            "close": 204.41,
+            "er": 0.249,
+            "quality": 26.1,
+            "active_len": 41
+          },
+          {
+            "bar": "2026-01-14 15:30",
+            "signal": "LONG",
+            "close": 221.31,
+            "er": 0.349,
+            "quality": 26.9,
+            "active_len": 38
+          },
+          {
+            "bar": "2026-02-04 17:30",
+            "signal": "SHORT",
+            "close": 200.99,
+            "er": 0.556,
+            "quality": 28.0,
+            "active_len": 31
+          },
+          {
+            "bar": "2026-02-25 15:30",
+            "signal": "LONG",
+            "close": 212.8,
+            "er": 0.315,
+            "quality": 27.4,
+            "active_len": 39
+          },
+          {
+            "bar": "2026-03-02 15:30",
+            "signal": "SHORT",
+            "close": 197.71,
+            "er": 0.006,
+            "quality": 29.9,
+            "active_len": 50
+          },
+          {
+            "bar": "2026-03-23 13:30",
+            "signal": "LONG",
+            "close": 206.99,
+            "er": 0.267,
+            "quality": 25.7,
+            "active_len": 41
+          }
+        ]
+      },
+      "3H": {
+        "status": "ok",
+        "bars": 1498,
+        "signals": 30,
+        "long": 15,
+        "short": 15,
+        "log": [
+          {
+            "bar": "2024-06-05 13:30",
+            "signal": "SHORT",
+            "close": 164.89,
+            "er": 0.06,
+            "quality": 34.2,
+            "active_len": 48
+          },
+          {
+            "bar": "2024-06-07 16:30",
+            "signal": "LONG",
+            "close": 167.34,
+            "er": 0.079,
+            "quality": 37.2,
+            "active_len": 47
+          },
+          {
+            "bar": "2024-06-11 13:30",
+            "signal": "SHORT",
+            "close": 158.61,
+            "er": 0.134,
+            "quality": 29.8,
+            "active_len": 45
+          },
+          {
+            "bar": "2024-07-05 19:30",
+            "signal": "LONG",
+            "close": 171.81,
+            "er": 0.405,
+            "quality": 29.3,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-07-17 19:30",
+            "signal": "SHORT",
+            "close": 159.42,
+            "er": 0.385,
+            "quality": 28.3,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-08-16 16:30",
+            "signal": "LONG",
+            "close": 148.62,
+            "er": 0.74,
+            "quality": 25.2,
+            "active_len": 24
+          },
+          {
+            "bar": "2024-09-06 19:30",
+            "signal": "SHORT",
+            "close": 134.4,
+            "er": 0.417,
+            "quality": 25.6,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-09-12 19:30",
+            "signal": "LONG",
+            "close": 150.82,
+            "er": 0.393,
+            "quality": 25.3,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-10-15 16:30",
+            "signal": "SHORT",
+            "close": 156.57,
+            "er": 0.488,
+            "quality": 25.8,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-10-29 16:30",
+            "signal": "LONG",
+            "close": 166.67,
+            "er": 0.387,
+            "quality": 27.4,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-10-31 16:30",
+            "signal": "SHORT",
+            "close": 144.07,
+            "er": 0.239,
+            "quality": 25.5,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-01-22 19:30",
+            "signal": "LONG",
+            "close": 123.69,
+            "er": 0.487,
+            "quality": 26.6,
+            "active_len": 33
+          },
+          {
+            "bar": "2025-01-28 13:30",
+            "signal": "SHORT",
+            "close": 113.47,
+            "er": 0.232,
+            "quality": 25.7,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-02-19 19:30",
+            "signal": "LONG",
+            "close": 114.67,
+            "er": 0.358,
+            "quality": 25.9,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-02-25 16:30",
+            "signal": "SHORT",
+            "close": 105.02,
+            "er": 0.403,
+            "quality": 26.9,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-03-17 16:30",
+            "signal": "LONG",
+            "close": 105.88,
+            "er": 0.29,
+            "quality": 26.8,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-03-31 16:30",
+            "signal": "SHORT",
+            "close": 101.96,
+            "er": 0.19,
+            "quality": 27.4,
+            "active_len": 43
+          },
+          {
+            "bar": "2025-04-25 16:30",
+            "signal": "LONG",
+            "close": 96.09,
+            "er": 0.038,
+            "quality": 26.0,
+            "active_len": 49
+          },
+          {
+            "bar": "2025-07-08 19:30",
+            "signal": "SHORT",
+            "close": 137.83,
+            "er": 0.264,
+            "quality": 32.5,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-07-10 19:30",
+            "signal": "LONG",
+            "close": 144.16,
+            "er": 0.084,
+            "quality": 36.8,
+            "active_len": 47
+          },
+          {
+            "bar": "2025-08-06 19:30",
+            "signal": "SHORT",
+            "close": 163.1,
+            "er": 0.424,
+            "quality": 29.7,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-10-02 13:30",
+            "signal": "LONG",
+            "close": 170.4,
+            "er": 0.368,
+            "quality": 28.2,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-11-07 13:30",
+            "signal": "SHORT",
+            "close": 227.13,
+            "er": 0.534,
+            "quality": 28.3,
+            "active_len": 31
+          },
+          {
+            "bar": "2025-12-09 19:30",
+            "signal": "LONG",
+            "close": 221.56,
+            "er": 0.207,
+            "quality": 26.3,
+            "active_len": 43
+          },
+          {
+            "bar": "2025-12-16 19:30",
+            "signal": "SHORT",
+            "close": 209.04,
+            "er": 0.312,
+            "quality": 25.6,
+            "active_len": 39
+          },
+          {
+            "bar": "2026-01-02 19:30",
+            "signal": "LONG",
+            "close": 223.44,
+            "er": 0.433,
+            "quality": 28.2,
+            "active_len": 35
+          },
+          {
+            "bar": "2026-01-09 13:30",
+            "signal": "SHORT",
+            "close": 206.83,
+            "er": 0.213,
+            "quality": 25.8,
+            "active_len": 43
+          },
+          {
+            "bar": "2026-01-15 13:30",
+            "signal": "LONG",
+            "close": 236.4,
+            "er": 0.427,
+            "quality": 27.8,
+            "active_len": 35
+          },
+          {
+            "bar": "2026-02-04 16:30",
+            "signal": "SHORT",
+            "close": 200.99,
+            "er": 0.555,
+            "quality": 28.8,
+            "active_len": 31
+          },
+          {
+            "bar": "2026-03-25 13:30",
+            "signal": "LONG",
+            "close": 218.2,
+            "er": 0.459,
+            "quality": 26.6,
+            "active_len": 34
+          }
+        ]
+      },
       "4H": {
         "status": "ok",
         "bars": 998,
@@ -7226,6 +11556,472 @@
           }
         ]
       },
+      "2H": {
+        "status": "ok",
+        "bars": 1996,
+        "signals": 32,
+        "long": 16,
+        "short": 16,
+        "log": [
+          {
+            "bar": "2024-05-23 15:30",
+            "signal": "SHORT",
+            "close": 150.33,
+            "er": 0.292,
+            "quality": 31.0,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-06-20 19:30",
+            "signal": "LONG",
+            "close": 147.77,
+            "er": 0.51,
+            "quality": 28.5,
+            "active_len": 32
+          },
+          {
+            "bar": "2024-06-27 17:30",
+            "signal": "SHORT",
+            "close": 145.48,
+            "er": 0.365,
+            "quality": 29.9,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-07-10 17:30",
+            "signal": "LONG",
+            "close": 148.54,
+            "er": 0.307,
+            "quality": 27.1,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-09-12 15:30",
+            "signal": "SHORT",
+            "close": 164.28,
+            "er": 0.161,
+            "quality": 26.8,
+            "active_len": 44
+          },
+          {
+            "bar": "2024-09-18 15:30",
+            "signal": "LONG",
+            "close": 167.8,
+            "er": 0.358,
+            "quality": 25.4,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-09-23 13:30",
+            "signal": "SHORT",
+            "close": 163.35,
+            "er": 0.379,
+            "quality": 30.1,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-10-14 15:30",
+            "signal": "LONG",
+            "close": 161.54,
+            "er": 0.224,
+            "quality": 26.4,
+            "active_len": 42
+          },
+          {
+            "bar": "2024-10-25 17:30",
+            "signal": "SHORT",
+            "close": 160.87,
+            "er": 0.384,
+            "quality": 27.0,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-11-22 13:30",
+            "signal": "LONG",
+            "close": 156.27,
+            "er": 0.404,
+            "quality": 35.6,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-12-04 13:30",
+            "signal": "SHORT",
+            "close": 150.99,
+            "er": 0.414,
+            "quality": 29.5,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-01-16 19:30",
+            "signal": "LONG",
+            "close": 147.78,
+            "er": 0.49,
+            "quality": 29.1,
+            "active_len": 33
+          },
+          {
+            "bar": "2025-03-14 15:30",
+            "signal": "SHORT",
+            "close": 162.65,
+            "er": 0.427,
+            "quality": 25.0,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-03-31 15:30",
+            "signal": "LONG",
+            "close": 165.51,
+            "er": 0.26,
+            "quality": 25.8,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-04-01 17:30",
+            "signal": "SHORT",
+            "close": 154.32,
+            "er": 0.366,
+            "quality": 31.1,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-05-08 17:30",
+            "signal": "LONG",
+            "close": 156.19,
+            "er": 0.144,
+            "quality": 26.2,
+            "active_len": 45
+          },
+          {
+            "bar": "2025-05-12 19:30",
+            "signal": "SHORT",
+            "close": 154.16,
+            "er": 0.093,
+            "quality": 40.8,
+            "active_len": 47
+          },
+          {
+            "bar": "2025-05-20 15:30",
+            "signal": "LONG",
+            "close": 153.79,
+            "er": 0.448,
+            "quality": 26.6,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-06-17 19:30",
+            "signal": "SHORT",
+            "close": 152.35,
+            "er": 0.434,
+            "quality": 27.9,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-07-01 15:30",
+            "signal": "LONG",
+            "close": 155.4,
+            "er": 0.451,
+            "quality": 25.7,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-08-27 15:30",
+            "signal": "SHORT",
+            "close": 177.12,
+            "er": 0.282,
+            "quality": 36.4,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-09-04 17:30",
+            "signal": "LONG",
+            "close": 178.54,
+            "er": 0.177,
+            "quality": 25.4,
+            "active_len": 44
+          },
+          {
+            "bar": "2025-09-10 17:30",
+            "signal": "SHORT",
+            "close": 175.47,
+            "er": 0.198,
+            "quality": 28.7,
+            "active_len": 43
+          },
+          {
+            "bar": "2025-09-26 15:30",
+            "signal": "LONG",
+            "close": 179.58,
+            "er": 0.338,
+            "quality": 29.6,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-10-28 15:30",
+            "signal": "SHORT",
+            "close": 187.21,
+            "er": 0.532,
+            "quality": 26.2,
+            "active_len": 31
+          },
+          {
+            "bar": "2025-11-11 19:30",
+            "signal": "LONG",
+            "close": 193.84,
+            "er": 0.662,
+            "quality": 29.5,
+            "active_len": 27
+          },
+          {
+            "bar": "2025-12-04 15:30",
+            "signal": "SHORT",
+            "close": 202.49,
+            "er": 0.337,
+            "quality": 25.4,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-12-11 17:30",
+            "signal": "LONG",
+            "close": 209.52,
+            "er": 0.35,
+            "quality": 26.0,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-12-23 13:30",
+            "signal": "SHORT",
+            "close": 206.31,
+            "er": 0.537,
+            "quality": 25.2,
+            "active_len": 31
+          },
+          {
+            "bar": "2026-01-13 15:30",
+            "signal": "LONG",
+            "close": 213.29,
+            "er": 0.438,
+            "quality": 28.1,
+            "active_len": 35
+          },
+          {
+            "bar": "2026-03-05 17:30",
+            "signal": "SHORT",
+            "close": 237.41,
+            "er": 0.239,
+            "quality": 25.4,
+            "active_len": 42
+          },
+          {
+            "bar": "2026-03-30 17:30",
+            "signal": "LONG",
+            "close": 241.9,
+            "er": 0.343,
+            "quality": 26.0,
+            "active_len": 38
+          }
+        ]
+      },
+      "3H": {
+        "status": "ok",
+        "bars": 1498,
+        "signals": 24,
+        "long": 12,
+        "short": 12,
+        "log": [
+          {
+            "bar": "2024-05-28 13:30",
+            "signal": "SHORT",
+            "close": 145.15,
+            "er": 0.557,
+            "quality": 34.0,
+            "active_len": 30
+          },
+          {
+            "bar": "2024-06-21 16:30",
+            "signal": "LONG",
+            "close": 148.92,
+            "er": 0.314,
+            "quality": 28.6,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-07-01 13:30",
+            "signal": "SHORT",
+            "close": 145.92,
+            "er": 0.096,
+            "quality": 26.2,
+            "active_len": 47
+          },
+          {
+            "bar": "2024-07-11 13:30",
+            "signal": "LONG",
+            "close": 149.93,
+            "er": 0.409,
+            "quality": 33.8,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-09-24 13:30",
+            "signal": "SHORT",
+            "close": 162.26,
+            "er": 0.418,
+            "quality": 27.4,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-10-15 13:30",
+            "signal": "LONG",
+            "close": 164.46,
+            "er": 0.499,
+            "quality": 32.5,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-10-28 13:30",
+            "signal": "SHORT",
+            "close": 161.74,
+            "er": 0.248,
+            "quality": 27.1,
+            "active_len": 41
+          },
+          {
+            "bar": "2024-11-25 13:30",
+            "signal": "LONG",
+            "close": 156.25,
+            "er": 0.314,
+            "quality": 34.0,
+            "active_len": 39
+          },
+          {
+            "bar": "2024-12-04 13:30",
+            "signal": "SHORT",
+            "close": 150.98,
+            "er": 0.349,
+            "quality": 25.8,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-01-17 19:30",
+            "signal": "LONG",
+            "close": 147.03,
+            "er": 0.344,
+            "quality": 27.2,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-04-01 16:30",
+            "signal": "SHORT",
+            "close": 154.32,
+            "er": 0.426,
+            "quality": 25.2,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-06-10 19:30",
+            "signal": "LONG",
+            "close": 156.49,
+            "er": 0.316,
+            "quality": 26.4,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-06-18 19:30",
+            "signal": "SHORT",
+            "close": 150.76,
+            "er": 0.478,
+            "quality": 29.2,
+            "active_len": 33
+          },
+          {
+            "bar": "2025-07-01 19:30",
+            "signal": "LONG",
+            "close": 155.9,
+            "er": 0.592,
+            "quality": 28.1,
+            "active_len": 29
+          },
+          {
+            "bar": "2025-08-28 19:30",
+            "signal": "SHORT",
+            "close": 175.43,
+            "er": 0.496,
+            "quality": 32.4,
+            "active_len": 33
+          },
+          {
+            "bar": "2025-09-26 19:30",
+            "signal": "LONG",
+            "close": 179.69,
+            "er": 0.317,
+            "quality": 28.8,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-10-28 16:30",
+            "signal": "SHORT",
+            "close": 187.53,
+            "er": 0.577,
+            "quality": 28.9,
+            "active_len": 30
+          },
+          {
+            "bar": "2025-11-11 19:30",
+            "signal": "LONG",
+            "close": 193.84,
+            "er": 0.4,
+            "quality": 27.3,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-12-05 13:30",
+            "signal": "SHORT",
+            "close": 202.09,
+            "er": 0.337,
+            "quality": 26.9,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-12-11 19:30",
+            "signal": "LONG",
+            "close": 210.09,
+            "er": 0.199,
+            "quality": 25.5,
+            "active_len": 43
+          },
+          {
+            "bar": "2025-12-23 19:30",
+            "signal": "SHORT",
+            "close": 205.74,
+            "er": 0.418,
+            "quality": 27.2,
+            "active_len": 35
+          },
+          {
+            "bar": "2026-01-13 19:30",
+            "signal": "LONG",
+            "close": 213.67,
+            "er": 0.56,
+            "quality": 33.3,
+            "active_len": 30
+          },
+          {
+            "bar": "2026-03-06 16:30",
+            "signal": "SHORT",
+            "close": 238.87,
+            "er": 0.236,
+            "quality": 27.1,
+            "active_len": 42
+          },
+          {
+            "bar": "2026-03-30 19:30",
+            "signal": "LONG",
+            "close": 242.5,
+            "er": 0.33,
+            "quality": 26.2,
+            "active_len": 38
+          }
+        ]
+      },
       "4H": {
         "status": "ok",
         "bars": 998,
@@ -7470,7 +12266,7 @@
             "bar": "2023-09-06 00:00",
             "signal": "SHORT",
             "close": 146.65,
-            "er": 0.591,
+            "er": 0.59,
             "quality": 25.0,
             "active_len": 29
           },
@@ -8100,6 +12896,520 @@
             "er": 0.379,
             "quality": 33.9,
             "active_len": 37
+          }
+        ]
+      },
+      "2H": {
+        "status": "ok",
+        "bars": 1996,
+        "signals": 34,
+        "long": 17,
+        "short": 17,
+        "log": [
+          {
+            "bar": "2024-05-23 17:30",
+            "signal": "SHORT",
+            "close": 34.76,
+            "er": 0.22,
+            "quality": 33.4,
+            "active_len": 42
+          },
+          {
+            "bar": "2024-07-03 15:30",
+            "signal": "LONG",
+            "close": 35.43,
+            "er": 0.487,
+            "quality": 33.5,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-07-22 13:30",
+            "signal": "SHORT",
+            "close": 37.19,
+            "er": 0.243,
+            "quality": 32.0,
+            "active_len": 41
+          },
+          {
+            "bar": "2024-08-13 15:30",
+            "signal": "LONG",
+            "close": 37.36,
+            "er": 0.391,
+            "quality": 26.0,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-09-03 17:30",
+            "signal": "SHORT",
+            "close": 37.29,
+            "er": 0.455,
+            "quality": 25.4,
+            "active_len": 34
+          },
+          {
+            "bar": "2024-09-12 17:30",
+            "signal": "LONG",
+            "close": 39.29,
+            "er": 0.364,
+            "quality": 26.4,
+            "active_len": 37
+          },
+          {
+            "bar": "2024-10-01 13:30",
+            "signal": "SHORT",
+            "close": 40.3,
+            "er": 0.122,
+            "quality": 33.6,
+            "active_len": 46
+          },
+          {
+            "bar": "2024-10-15 13:30",
+            "signal": "LONG",
+            "close": 40.4,
+            "er": 0.49,
+            "quality": 25.6,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-10-25 17:30",
+            "signal": "SHORT",
+            "close": 41.56,
+            "er": 0.334,
+            "quality": 36.0,
+            "active_len": 38
+          },
+          {
+            "bar": "2024-11-19 19:30",
+            "signal": "LONG",
+            "close": 37.89,
+            "er": 0.415,
+            "quality": 29.7,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-12-16 13:30",
+            "signal": "SHORT",
+            "close": 36.5,
+            "er": 0.388,
+            "quality": 29.9,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-01-03 15:30",
+            "signal": "LONG",
+            "close": 35.01,
+            "er": 0.135,
+            "quality": 33.3,
+            "active_len": 45
+          },
+          {
+            "bar": "2025-02-25 15:30",
+            "signal": "SHORT",
+            "close": 39.86,
+            "er": 0.34,
+            "quality": 27.2,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-03-07 13:30",
+            "signal": "LONG",
+            "close": 41.96,
+            "er": 0.53,
+            "quality": 25.4,
+            "active_len": 31
+          },
+          {
+            "bar": "2025-04-04 15:30",
+            "signal": "SHORT",
+            "close": 41.85,
+            "er": 0.532,
+            "quality": 33.6,
+            "active_len": 31
+          },
+          {
+            "bar": "2025-04-10 19:30",
+            "signal": "LONG",
+            "close": 47.14,
+            "er": 0.102,
+            "quality": 29.6,
+            "active_len": 46
+          },
+          {
+            "bar": "2025-04-24 13:30",
+            "signal": "SHORT",
+            "close": 49.1,
+            "er": 0.359,
+            "quality": 26.0,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-05-07 13:30",
+            "signal": "LONG",
+            "close": 50.07,
+            "er": 0.18,
+            "quality": 33.1,
+            "active_len": 44
+          },
+          {
+            "bar": "2025-05-13 13:30",
+            "signal": "SHORT",
+            "close": 46.53,
+            "er": 0.37,
+            "quality": 27.7,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-05-20 19:30",
+            "signal": "LONG",
+            "close": 48.78,
+            "er": 0.346,
+            "quality": 26.1,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-06-24 17:30",
+            "signal": "SHORT",
+            "close": 51.91,
+            "er": 0.347,
+            "quality": 26.8,
+            "active_len": 38
+          },
+          {
+            "bar": "2025-07-22 13:30",
+            "signal": "LONG",
+            "close": 54.29,
+            "er": 0.372,
+            "quality": 35.1,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-07-30 15:30",
+            "signal": "SHORT",
+            "close": 52.54,
+            "er": 0.318,
+            "quality": 25.0,
+            "active_len": 39
+          },
+          {
+            "bar": "2025-08-04 19:30",
+            "signal": "LONG",
+            "close": 54.94,
+            "er": 0.371,
+            "quality": 29.3,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-08-19 17:30",
+            "signal": "SHORT",
+            "close": 56.67,
+            "er": 0.374,
+            "quality": 29.3,
+            "active_len": 37
+          },
+          {
+            "bar": "2025-08-21 17:30",
+            "signal": "LONG",
+            "close": 59.2,
+            "er": 0.264,
+            "quality": 30.6,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-10-21 19:30",
+            "signal": "SHORT",
+            "close": 72.78,
+            "er": 0.243,
+            "quality": 26.9,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-11-10 15:30",
+            "signal": "LONG",
+            "close": 75.57,
+            "er": 0.353,
+            "quality": 25.2,
+            "active_len": 38
+          },
+          {
+            "bar": "2026-01-02 17:30",
+            "signal": "SHORT",
+            "close": 84.43,
+            "er": 0.341,
+            "quality": 25.2,
+            "active_len": 38
+          },
+          {
+            "bar": "2026-01-06 19:30",
+            "signal": "LONG",
+            "close": 92.06,
+            "er": 0.414,
+            "quality": 27.0,
+            "active_len": 36
+          },
+          {
+            "bar": "2026-01-30 17:30",
+            "signal": "SHORT",
+            "close": 95.22,
+            "er": 0.3,
+            "quality": 27.5,
+            "active_len": 40
+          },
+          {
+            "bar": "2026-02-11 13:30",
+            "signal": "LONG",
+            "close": 103.13,
+            "er": 0.243,
+            "quality": 26.0,
+            "active_len": 41
+          },
+          {
+            "bar": "2026-03-04 15:30",
+            "signal": "SHORT",
+            "close": 105.93,
+            "er": 0.227,
+            "quality": 25.0,
+            "active_len": 42
+          },
+          {
+            "bar": "2026-03-31 17:30",
+            "signal": "LONG",
+            "close": 91.2,
+            "er": 0.376,
+            "quality": 25.8,
+            "active_len": 37
+          }
+        ]
+      },
+      "3H": {
+        "status": "ok",
+        "bars": 1498,
+        "signals": 28,
+        "long": 14,
+        "short": 14,
+        "log": [
+          {
+            "bar": "2024-06-10 13:30",
+            "signal": "SHORT",
+            "close": 33.92,
+            "er": 0.282,
+            "quality": 25.1,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-07-05 13:30",
+            "signal": "LONG",
+            "close": 36.4,
+            "er": 0.413,
+            "quality": 26.5,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-07-23 19:30",
+            "signal": "SHORT",
+            "close": 37.47,
+            "er": 0.173,
+            "quality": 29.9,
+            "active_len": 44
+          },
+          {
+            "bar": "2024-08-16 16:30",
+            "signal": "LONG",
+            "close": 38.46,
+            "er": 0.724,
+            "quality": 26.2,
+            "active_len": 25
+          },
+          {
+            "bar": "2024-09-04 13:30",
+            "signal": "SHORT",
+            "close": 37.13,
+            "er": 0.503,
+            "quality": 26.2,
+            "active_len": 32
+          },
+          {
+            "bar": "2024-09-13 13:30",
+            "signal": "LONG",
+            "close": 40.12,
+            "er": 0.482,
+            "quality": 28.3,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-10-03 19:30",
+            "signal": "SHORT",
+            "close": 39.6,
+            "er": 0.394,
+            "quality": 25.2,
+            "active_len": 36
+          },
+          {
+            "bar": "2024-10-16 13:30",
+            "signal": "LONG",
+            "close": 41.04,
+            "er": 0.484,
+            "quality": 27.2,
+            "active_len": 33
+          },
+          {
+            "bar": "2024-10-29 13:30",
+            "signal": "SHORT",
+            "close": 41.69,
+            "er": 0.272,
+            "quality": 28.0,
+            "active_len": 40
+          },
+          {
+            "bar": "2024-11-21 16:30",
+            "signal": "LONG",
+            "close": 37.93,
+            "er": 0.42,
+            "quality": 25.6,
+            "active_len": 35
+          },
+          {
+            "bar": "2024-12-16 19:30",
+            "signal": "SHORT",
+            "close": 36.41,
+            "er": 0.114,
+            "quality": 26.3,
+            "active_len": 46
+          },
+          {
+            "bar": "2025-01-10 13:30",
+            "signal": "LONG",
+            "close": 36.06,
+            "er": 0.533,
+            "quality": 26.1,
+            "active_len": 31
+          },
+          {
+            "bar": "2025-02-25 16:30",
+            "signal": "SHORT",
+            "close": 40.06,
+            "er": 0.423,
+            "quality": 25.7,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-03-13 16:30",
+            "signal": "LONG",
+            "close": 43.17,
+            "er": 0.416,
+            "quality": 25.8,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-04-04 19:30",
+            "signal": "SHORT",
+            "close": 41.67,
+            "er": 0.477,
+            "quality": 31.4,
+            "active_len": 33
+          },
+          {
+            "bar": "2025-04-11 13:30",
+            "signal": "LONG",
+            "close": 49.69,
+            "er": 0.236,
+            "quality": 25.8,
+            "active_len": 42
+          },
+          {
+            "bar": "2025-05-01 13:30",
+            "signal": "SHORT",
+            "close": 47.06,
+            "er": 0.391,
+            "quality": 26.1,
+            "active_len": 36
+          },
+          {
+            "bar": "2025-05-21 19:30",
+            "signal": "LONG",
+            "close": 49.47,
+            "er": 0.451,
+            "quality": 27.1,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-06-27 13:30",
+            "signal": "SHORT",
+            "close": 50.6,
+            "er": 0.426,
+            "quality": 25.9,
+            "active_len": 35
+          },
+          {
+            "bar": "2025-07-22 16:30",
+            "signal": "LONG",
+            "close": 54.56,
+            "er": 0.28,
+            "quality": 27.8,
+            "active_len": 40
+          },
+          {
+            "bar": "2025-07-31 16:30",
+            "signal": "SHORT",
+            "close": 51.58,
+            "er": 0.468,
+            "quality": 26.0,
+            "active_len": 34
+          },
+          {
+            "bar": "2025-08-05 13:30",
+            "signal": "LONG",
+            "close": 56.26,
+            "er": 0.248,
+            "quality": 27.2,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-10-22 16:30",
+            "signal": "SHORT",
+            "close": 73.1,
+            "er": 0.267,
+            "quality": 25.3,
+            "active_len": 41
+          },
+          {
+            "bar": "2025-11-11 13:30",
+            "signal": "LONG",
+            "close": 75.77,
+            "er": 0.287,
+            "quality": 25.2,
+            "active_len": 40
+          },
+          {
+            "bar": "2026-02-02 13:30",
+            "signal": "SHORT",
+            "close": 93.92,
+            "er": 0.307,
+            "quality": 29.3,
+            "active_len": 39
+          },
+          {
+            "bar": "2026-02-11 19:30",
+            "signal": "LONG",
+            "close": 105.96,
+            "er": 0.285,
+            "quality": 25.5,
+            "active_len": 40
+          },
+          {
+            "bar": "2026-03-05 16:30",
+            "signal": "SHORT",
+            "close": 100.14,
+            "er": 0.345,
+            "quality": 25.7,
+            "active_len": 38
+          },
+          {
+            "bar": "2026-03-31 16:30",
+            "signal": "LONG",
+            "close": 91.2,
+            "er": 0.473,
+            "quality": 25.7,
+            "active_len": 33
           }
         ]
       },
