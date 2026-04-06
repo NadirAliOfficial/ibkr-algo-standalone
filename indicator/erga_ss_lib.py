@@ -84,6 +84,8 @@ class ERGA_SS:
 
         self._pre_ss1 = self._pre_ss2 = 0.0
         self._ss1     = self._ss2     = 0.0
+        self._pre_src_prev  = 0.0
+        self._main_src_prev = 0.0
 
         self._raw_buf     = deque(maxlen=max(slow_len + 1, er_len + 1, 200))
         self._pre_buf     = deque(maxlen=max(slow_len + 1, 5))
@@ -235,16 +237,21 @@ class ERGA_SS:
         c3 = -(a * a)
         c1 = 1.0 - c2 - c3
         if tag == "_pre":
-            s1, s2 = self._pre_ss1, self._pre_ss2
+            s1, s2   = self._pre_ss1, self._pre_ss2
+            src_prev = self._pre_src_prev
         else:
-            s1, s2 = self._ss1, self._ss2
-        val = c1 * (src + (s1 if s1 != 0.0 else src)) / 2.0 + c2 * s1 + c3 * s2
+            s1, s2   = self._ss1, self._ss2
+            src_prev = self._main_src_prev
+        # Ehlers formula: C1/2 * (src + src[1]) + C2 * SS[1] + C3 * SS[2]
+        val = c1 / 2.0 * (src + src_prev) + c2 * s1 + c3 * s2
         if tag == "_pre":
-            self._pre_ss2 = self._pre_ss1
-            self._pre_ss1 = val
+            self._pre_ss2     = self._pre_ss1
+            self._pre_ss1     = val
+            self._pre_src_prev = src
         else:
-            self._ss2 = self._ss1
-            self._ss1 = val
+            self._ss2           = self._ss1
+            self._ss1           = val
+            self._main_src_prev = src
         return val
 
     @staticmethod
