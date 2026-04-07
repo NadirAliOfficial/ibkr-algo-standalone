@@ -90,18 +90,18 @@ class ERGA_SS:
         self._raw_buf     = deque(maxlen=max(slow_len + 1, er_len + 1, 200))
         self._pre_buf     = deque(maxlen=max(slow_len + 1, 5))
         self._ss_buf      = deque(maxlen=max(slow_len + 1, 200))
-        self._atr_buf     = deque(maxlen=100)
-        self._atr_sma_buf = deque(maxlen=100)
+        self._atr_sma_buf = deque(maxlen=100)  # for vol_scale only
         self._ssline_buf  = deque(maxlen=50)   # for stdev(ssLine, 50) — matches Pine
         self._slope_stats = _RollingStats(100)  # for stdev(slope, 100) — matches Pine
 
         self._prev_close = None
         self._prev_high  = None
         self._prev_low   = None
-        self._atr_smooth = 0.0
-        self._adx_smooth = 0.0
-        self._plus_di    = 0.0
-        self._minus_di   = 0.0
+        self._atr_smooth  = 0.0
+        self._tr_rma      = 0.0   # separate TR RMA for ADX (matches ta.dmi)
+        self._pdm_rma     = 0.0
+        self._ndm_rma     = 0.0
+        self._adx_smooth  = 0.0
 
         self.trend            = 1
         self.bull_flip        = False
@@ -136,8 +136,6 @@ class ERGA_SS:
         # ATR + ADX
         atr = self._calc_atr(close, high, low)
         adx = self._calc_adx(close, high, low)
-        self._atr_buf.append(atr)
-        self._atr_sma_buf.append(atr)
 
         # Stage 3: Adaptive length
         if self.calc_mode == "Manual Slow":
@@ -147,6 +145,7 @@ class ERGA_SS:
         else:
             er_len_val = round(self.fast_len + (1.0 - self.er) * (self.slow_len - self.fast_len))
             er_len_val = max(self.fast_len, min(self.slow_len, er_len_val))
+            self._atr_sma_buf.append(atr)
             if self.use_vol_scale and len(self._atr_sma_buf) >= 20:
                 atr_sma = sum(self._atr_sma_buf) / len(self._atr_sma_buf)
                 if atr_sma > 0:
@@ -273,20 +272,28 @@ class ERGA_SS:
         return self._atr_smooth
 
     def _calc_adx(self, close: float, high: float, low: float) -> float:
+        """
+        Matches Pine Script ta.dmi(14, 14):
+        Smooth +DM, -DM, TR separately (not the ratio), then compute DI and DX.
+        """
         if self._prev_high is None or self._prev_low is None:
             return 0.0
+        tr       = max(self._prev_high - self._prev_low,
+                       abs(self._prev_high - close),
+                       abs(self._prev_low  - close))
         up_move  = high - self._prev_high
         dn_move  = self._prev_low - low
         plus_dm  = up_move if (up_move > dn_move and up_move > 0) else 0.0
         minus_dm = dn_move if (dn_move > up_move and dn_move > 0) else 0.0
-        atr = self._atr_smooth if self._atr_smooth > 0 else 1e-10
-        k   = 1.0 / self.adx_len
-        self._plus_di  = self._plus_di  * (1.0 - k) + (plus_dm  / atr) * k
-        self._minus_di = self._minus_di * (1.0 - k) + (minus_dm / atr) * k
-        di_sum = self._plus_di + self._minus_di
-        if di_sum == 0:
-            return 0.0
-        dx = abs(self._plus_di - self._minus_di) / di_sum * 100.0
+        k = 1.0 / self.adx_len
+        self._tr_rma  = self._tr_rma  * (1.0 - k) + tr       * k
+        self._pdm_rma = self._pdm_rma * (1.0 - k) + plus_dm  * k
+        self._ndm_rma = self._ndm_rma * (1.0 - k) + minus_dm * k
+        tr_nz    = self._tr_rma if self._tr_rma > 0 else 1e-10
+        plus_di  = self._pdm_rma / tr_nz * 100.0
+        minus_di = self._ndm_rma / tr_nz * 100.0
+        di_sum   = plus_di + minus_di
+        dx       = abs(plus_di - minus_di) / di_sum * 100.0 if di_sum > 0 else 0.0
         self._adx_smooth = self._adx_smooth * (1.0 - k) + dx * k
         return self._adx_smooth
 
