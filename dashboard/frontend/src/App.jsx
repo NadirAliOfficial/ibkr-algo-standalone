@@ -149,7 +149,11 @@ function WatchlistManager() {
   const [bulkTf, setBulkTf] = useState("");
   const [expandedParams, setExpandedParams] = useState(null);
 
-  const addMut = useMutation({ mutationFn: addTicker, onSuccess: () => { qclient.invalidateQueries(["tickers"]); toast.success("Ticker added"); setNewTicker(p => ({ ...p, ticker: "" })); } });
+  const addMut = useMutation({
+    mutationFn: addTicker,
+    onSuccess: () => { qclient.invalidateQueries(["tickers"]); toast.success("Ticker added"); setNewTicker(p => ({ ...p, ticker: "" })); },
+    onError: (e) => toast.error(e?.response?.data?.detail || "Failed to add ticker"),
+  });
   const delMut = useMutation({ mutationFn: deleteTicker, onSuccess: () => { qclient.invalidateQueries(["tickers"]); toast.success("Removed"); } });
   const updMut = useMutation({ mutationFn: ({ ticker, payload }) => updateTicker(ticker, payload), onSuccess: () => qclient.invalidateQueries(["tickers"]) });
   const bulkMut = useMutation({ mutationFn: bulkEdit, onSuccess: () => { qclient.invalidateQueries(["tickers"]); toast.success(`Updated ${selected.length} tickers`); setSelected([]); } });
@@ -201,7 +205,10 @@ function WatchlistManager() {
           </select>
         </div>
         <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm h-8"
-          onClick={() => addMut.mutate(newTicker)}>+ Add</button>
+          onClick={() => {
+            if (!newTicker.ticker.trim()) { toast.error("Enter a ticker symbol first"); return; }
+            addMut.mutate(newTicker);
+          }}>+ Add</button>
       </div>
 
       {/* Bulk edit bar */}
