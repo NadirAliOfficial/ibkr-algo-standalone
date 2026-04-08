@@ -33,6 +33,10 @@ def parse_tv_csv(path: Path) -> pd.DataFrame:
         "BUY":        "tv_buy",
         "SELL":       "tv_sell",
     })
+    # Fill missing TV columns for OHLCV-only exports
+    for col, default in [("tv_ss", float("nan")), ("tv_buy", 0), ("tv_sell", 0)]:
+        if col not in df.columns:
+            df[col] = default
     return df.set_index("dt").sort_index()
 
 
@@ -48,8 +52,8 @@ def run_python(df: pd.DataFrame):
     df["py_ss"]   = py_ss
     df["py_buy"]  = py_buy
     df["py_sell"] = py_sell
-    df["ss_diff"] = df["py_ss"] - df["tv_ss"]
-    df["ss_pct"]  = (df["ss_diff"] / df["tv_ss"].abs()).where(df["tv_ss"] != 0) * 100
+    df["ss_diff"] = df["py_ss"] - df["tv_ss"] if df["tv_ss"].notna().any() else 0.0
+    df["ss_pct"]  = (df["ss_diff"] / df["tv_ss"].abs()).where(df["tv_ss"].notna() & (df["tv_ss"] != 0)) * 100
     return df
 
 
