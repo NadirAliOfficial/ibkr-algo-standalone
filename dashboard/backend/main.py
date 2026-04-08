@@ -5,9 +5,8 @@ Runner and broker are injected at startup by main.py — not created here.
 
 import os
 import secrets
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
@@ -20,21 +19,23 @@ FRONTEND_BUILD = os.path.join(
     os.path.dirname(__file__), "..", "frontend", "build"
 )
 
-security = HTTPBasic()
-
-
-def auth(credentials: HTTPBasicCredentials = Depends(security)):
+def auth(request: Request):
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Basic "):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+    import base64
+    try:
+        decoded = base64.b64decode(auth_header[6:]).decode()
+        username, password = decoded.split(":", 1)
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid header")
     ok = (
-        secrets.compare_digest(credentials.username, DASHBOARD_USER)
-        and secrets.compare_digest(credentials.password, DASHBOARD_PASS)
+        secrets.compare_digest(username, DASHBOARD_USER)
+        and secrets.compare_digest(password, DASHBOARD_PASS)
     )
     if not ok:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials",
-            headers={"WWW-Authenticate": "Basic"},
-        )
-    return credentials.username
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+    return username
 
 
 app = FastAPI(title="IBKR Algo Dashboard", version="2.0.0")
@@ -58,6 +59,11 @@ app.include_router(system.router,    prefix="/api/system",    tags=["system"],  
 @app.get("/health", include_in_schema=False)
 def health():
     return {"status": "ok"}
+
+
+@app.get("/api/auth/verify", include_in_schema=False, dependencies=[Depends(auth)])
+def verify_auth():
+    return {"ok": True}
 
 
 # Serve React build if it exists — must be last

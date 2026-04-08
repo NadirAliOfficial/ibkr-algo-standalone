@@ -1,23 +1,38 @@
 import axios from "axios";
 
-const creds = btoa(
-  `${process.env.REACT_APP_DASH_USER || "admin"}:${process.env.REACT_APP_DASH_PASS || "changeme"}`
-);
+const STORAGE_KEY = "ibkr_dash_creds";
 
-const api = axios.create({
-  baseURL: "/api",
-  headers: { Authorization: `Basic ${creds}` },
-});
+export function saveCredentials(username, password) {
+  localStorage.setItem(STORAGE_KEY, btoa(`${username}:${password}`));
+}
 
-export const getTickers = () => api.get("/tickers/").then((r) => r.data);
-export const addTicker = (payload) => api.post("/tickers/", payload).then((r) => r.data);
-export const updateTicker = (ticker, payload) => api.put(`/tickers/${ticker}`, payload).then((r) => r.data);
-export const deleteTicker = (ticker) => api.delete(`/tickers/${ticker}`).then((r) => r.data);
-export const bulkEdit = (payload) => api.post("/tickers/bulk-edit", payload).then((r) => r.data);
+export function loadCredentials() {
+  return localStorage.getItem(STORAGE_KEY);
+}
 
-export const getPositions = () => api.get("/positions/").then((r) => r.data);
-export const getSignalLog = () => api.get("/logs/signals").then((r) => r.data);
-export const getTradeLog = () => api.get("/logs/trades").then((r) => r.data);
-export const getStatus = () => api.get("/system/status").then((r) => r.data);
-export const clearHalt = (ticker) => api.post(`/system/clear-halt/${ticker}`).then((r) => r.data);
-export const getEarningsLog = () => api.get("/logs/earnings").then((r) => r.data);
+export function clearCredentials() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+function getApi() {
+  const creds = loadCredentials();
+  return axios.create({
+    baseURL: "/api",
+    headers: creds ? { Authorization: `Basic ${creds}` } : {},
+  });
+}
+
+const call = (fn) => fn().then((r) => r.data);
+
+export const verifyAuth = () => call(() => getApi().get("/auth/verify"));
+export const getTickers = () => call(() => getApi().get("/tickers/"));
+export const addTicker = (p) => call(() => getApi().post("/tickers/", p));
+export const updateTicker = (ticker, p) => call(() => getApi().put(`/tickers/${ticker}`, p));
+export const deleteTicker = (ticker) => call(() => getApi().delete(`/tickers/${ticker}`));
+export const bulkEdit = (p) => call(() => getApi().post("/tickers/bulk-edit", p));
+export const getPositions = () => call(() => getApi().get("/positions/"));
+export const getSignalLog = () => call(() => getApi().get("/logs/signals"));
+export const getTradeLog = () => call(() => getApi().get("/logs/trades"));
+export const getStatus = () => call(() => getApi().get("/system/status"));
+export const clearHalt = (ticker) => call(() => getApi().post(`/system/clear-halt/${ticker}`));
+export const getEarningsLog = () => call(() => getApi().get("/logs/earnings"));

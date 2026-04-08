@@ -1,9 +1,69 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { QueryClient, QueryClientProvider, useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast, { Toaster } from "react-hot-toast";
-import { getTickers, addTicker, updateTicker, deleteTicker, bulkEdit, getPositions, getSignalLog, getTradeLog, getStatus, clearHalt, getEarningsLog } from "./api";
+import { getTickers, addTicker, updateTicker, deleteTicker, bulkEdit, getPositions, getSignalLog, getTradeLog, getStatus, clearHalt, getEarningsLog, verifyAuth, saveCredentials, loadCredentials, clearCredentials } from "./api";
 
 const qc = new QueryClient();
+
+function LoginPage({ onLogin }) {
+  const [username, setUsername] = useState("admin");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    saveCredentials(username, password);
+    try {
+      await verifyAuth();
+      onLogin();
+    } catch {
+      clearCredentials();
+      setError("Invalid username or password");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="bg-gray-900 border border-gray-700 rounded-xl p-8 w-full max-w-sm shadow-2xl">
+        <h1 className="text-white text-xl font-bold mb-1">IBKR Algo Dashboard</h1>
+        <p className="text-gray-400 text-sm mb-6">Sign in to continue</p>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-xs text-gray-400 mb-1">Username</label>
+            <input
+              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              autoFocus
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-gray-400 mb-1">Password</label>
+            <input
+              type="password"
+              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+          </div>
+          {error && <p className="text-red-400 text-xs">{error}</p>}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium py-2 rounded-lg text-sm transition"
+          >
+            {loading ? "Signing in..." : "Sign in"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
 
 const TIMEFRAMES = ["1m", "5m", "15m", "30m", "1H", "2H", "3H", "4H", "1D"];
 const STATE_COLORS = { WAITING: "bg-gray-500", LONG: "bg-green-600", SHORT: "bg-red-600", BLOCKED: "bg-yellow-600" };
@@ -357,17 +417,21 @@ function Logs() {
 
 const TABS = ["Watchlist", "Positions", "Logs"];
 
-function Dashboard() {
+function Dashboard({ onLogout }) {
   const [tab, setTab] = useState("Watchlist");
   return (
     <div className="min-h-screen bg-gray-950 text-white font-sans">
       <div className="border-b border-gray-700 px-4 py-3 flex items-center justify-between">
         <h1 className="font-bold text-sm tracking-wide">IBKR Algo Dashboard</h1>
-        <div className="flex gap-1">
+        <div className="flex gap-1 items-center">
           {TABS.map(t => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-3 py-1 rounded text-sm ${tab === t ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"}`}>{t}</button>
           ))}
+          <button
+            onClick={onLogout}
+            className="ml-3 text-xs text-gray-500 hover:text-gray-300 border border-gray-700 px-2 py-1 rounded"
+          >Logout</button>
         </div>
       </div>
       <StatusBar />
@@ -379,10 +443,27 @@ function Dashboard() {
 }
 
 export default function App() {
+  const [authed, setAuthed] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    if (!loadCredentials()) { setChecking(false); return; }
+    verifyAuth()
+      .then(() => setAuthed(true))
+      .catch(() => { clearCredentials(); })
+      .finally(() => setChecking(false));
+  }, []);
+
+  const handleLogout = () => { clearCredentials(); setAuthed(false); };
+
+  if (checking) {
+    return <div className="min-h-screen bg-gray-950 flex items-center justify-center text-gray-500 text-sm">Loading...</div>;
+  }
+
   return (
     <QueryClientProvider client={qc}>
       <Toaster position="top-right" toastOptions={{ style: { background: "#1f2937", color: "#fff" } }} />
-      <Dashboard />
+      {authed ? <Dashboard onLogout={handleLogout} /> : <LoginPage onLogin={() => setAuthed(true)} />}
     </QueryClientProvider>
   );
 }
