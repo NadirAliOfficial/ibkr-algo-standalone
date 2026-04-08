@@ -1,10 +1,28 @@
+"""
+Signal processor — executes the full trade state machine on a confirmed flip signal.
+
+Flow per signal:
+  1. Ticker active?
+  2. Ticker halted?
+  3. Earnings block?
+  4. Already in target state? → skip
+  5. Close existing position → confirm fill
+  6. Open new position → confirm fill
+  7. State transition (re-validates against IBKR)
+  8. Return detailed log entry
+
+Every order waits for confirmed fill before proceeding to the next step.
+A failed close aborts the sequence — we never open a position without knowing the
+previous one is closed.
+"""
+
 import logging
-import math
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
+
 from indicator.signal import Signal, SignalType
 from config.store import ConfigStore
-from engine.broker.connection import IBKRConnection
+from engine.broker.connection import IBKRConnection, FillResult
 from engine.algo.state_machine import PositionStateMachine
 from engine.algo.earnings_filter import EarningsFilter
 from engine.data.polygon import PolygonData
@@ -13,136 +31,160 @@ logger = logging.getLogger(__name__)
 
 
 class SignalProcessor:
-    """
-    Executes the full state machine on a confirmed flip_long / flip_short signal.
-
-    Flow:
-    1. Is ticker active?
-    2. Earnings filter — block?
-    3. Current position state?
-    4. Close existing → confirm close → open opposite
-    5. Log all events
-    """
 
     def __init__(
         self,
-        store: ConfigStore,
-        broker: IBKRConnection,
-        state: PositionStateMachine,
+        store:    ConfigStore,
+        broker:   IBKRConnection,
+        state:    PositionStateMachine,
         earnings: EarningsFilter,
-        polygon: PolygonData,
+        polygon:  PolygonData,
     ):
-        self.store = store
-        self.broker = broker
-        self.state = state
+        self.store    = store
+        self.broker   = broker
+        self.state    = state
         self.earnings = earnings
-        self.polygon = polygon
+        self.polygon  = polygon
 
     def handle(self, signal: Signal) -> dict:
-        """Process a signal. Returns a log dict."""
         ticker = signal.ticker
-        log = {
-            "timestamp": datetime.utcnow().isoformat(),
-            "ticker": ticker,
-            "signal": signal.signal_type.value,
-            "bar_time": signal.bar_time.isoformat(),
-            "close_price": signal.close_price,
-            "outcome": "pending",
-            "reason": "",
+        now    = datetime.now(timezone.utc).isoformat()
+
+        log: dict = {
+            "timestamp":    now,
+            "ticker":       ticker,
+            "signal":       signal.signal_type.value,
+            "bar_time":     signal.bar_time.isoformat() if hasattr(signal.bar_time, "isoformat") else str(signal.bar_time),
+            "signal_price": signal.close_price,
+            "outcome":      "pending",
+            "reason":       "",
+            "close_fill":   None,
+            "open_fill":    None,
+            "pnl":          None,
         }
 
         cfg = self.store.get(ticker)
         if not cfg or not cfg.active:
-            log.update(outcome="ignored", reason="ticker inactive")
-            logger.info(f"{ticker}: signal ignored — inactive")
-            return log
+            return {**log, "outcome": "ignored", "reason": "ticker inactive"}
 
         if self.state.is_halted(ticker):
-            log.update(outcome="blocked", reason="halted — unexpected position state")
-            return log
+            return {**log, "outcome": "blocked", "reason": "halted — awaiting manual resolution"}
 
         if not self.earnings.check_signal(ticker):
-            log.update(outcome="blocked", reason=f"earnings within window")
-            return log
+            return {**log, "outcome": "blocked", "reason": "earnings within window"}
 
-        current_state = self.state.get_state(ticker)
-        target_state = "long" if signal.signal_type == SignalType.FLIP_LONG else "short"
+        current = self.state.get_state(ticker)
+        target  = "long" if signal.signal_type == SignalType.FLIP_LONG else "short"
 
-        if current_state == target_state:
-            log.update(outcome="ignored", reason=f"already {target_state}")
-            return log
+        if current == target:
+            return {**log, "outcome": "ignored", "reason": f"already {target}"}
 
-        # Close existing position if not flat
-        if current_state != "flat":
-            closed = self._close_position(ticker, current_state, cfg)
-            if not closed:
-                log.update(outcome="error", reason=f"failed to close {current_state}")
-                return log
+        # ── close existing position ───────────────────────────────────────────
+        close_result: Optional[FillResult] = None
+        if current != "flat":
+            close_result = self._close_position(ticker, current)
+            log["close_fill"] = self._fill_dict(close_result) if close_result else None
 
-        # Open new position
-        opened = self._open_position(ticker, target_state, cfg, signal.close_price)
-        if not opened:
-            log.update(outcome="error", reason=f"failed to open {target_state}")
+            if not close_result or not close_result.success:
+                reason = close_result.status if close_result else "no trade returned"
+                logger.error(f"{ticker}: failed to close {current} — {reason}")
+                # Halt ticker: we don't know the real position state anymore
+                self.state.halt(ticker, f"close order failed: {reason}")
+                return {**log, "outcome": "error", "reason": f"close failed: {reason}"}
+
             self.state.mark_flat(ticker)
-            return log
+            logger.info(f"{ticker}: closed {current} — {close_result.filled_qty}@{close_result.avg_price:.4f}")
 
-        if not self.state.transition(ticker, target_state):
-            log.update(outcome="error", reason="state transition rejected")
-            return log
+        # ── open new position ─────────────────────────────────────────────────
+        open_result = self._open_position(ticker, target, cfg, signal.close_price)
+        log["open_fill"] = self._fill_dict(open_result) if open_result else None
 
-        log.update(outcome="executed")
-        logger.info(f"{ticker}: executed {signal.signal_type.value}")
+        if not open_result or not open_result.success:
+            reason = open_result.status if open_result else "no trade returned"
+            logger.error(f"{ticker}: failed to open {target} — {reason}")
+            self.state.halt(ticker, f"open order failed: {reason}")
+            return {**log, "outcome": "error", "reason": f"open failed: {reason}"}
+
+        # ── state transition ──────────────────────────────────────────────────
+        if not self.state.transition(ticker, target):
+            # transition() already halted the ticker if IBKR state mismatches
+            return {**log, "outcome": "error", "reason": "state transition rejected by IBKR sync"}
+
+        # ── P&L calculation ───────────────────────────────────────────────────
+        pnl = None
+        if close_result and close_result.success and open_result.success:
+            entry = close_result.avg_price
+            exit_ = open_result.avg_price
+            qty   = close_result.filled_qty
+            mult  = 1 if current == "long" else -1
+            pnl   = round((exit_ - entry) * qty * mult, 2)
+
+        log.update(outcome="executed", pnl=pnl)
+        logger.info(
+            f"{ticker}: executed {signal.signal_type.value} "
+            f"qty={open_result.filled_qty} fill={open_result.avg_price:.4f}"
+            + (f" pnl={pnl}" if pnl is not None else "")
+        )
         return log
 
-    def _close_position(self, ticker: str, current_state: str, cfg) -> bool:
+    # ── close ─────────────────────────────────────────────────────────────────
+
+    def _close_position(self, ticker: str, current_state: str) -> Optional[FillResult]:
         positions = self.broker.get_positions()
         pos = positions.get(ticker)
-        if not pos:
-            self.state.mark_flat(ticker)
-            return True
 
-        qty = pos["qty"]
+        if not pos:
+            # IBKR says flat — update our state and proceed
+            logger.warning(f"{ticker}: expected {current_state} but IBKR shows flat — syncing")
+            self.state.mark_flat(ticker)
+            return FillResult(success=True, filled_qty=0, avg_price=0.0, status="already_flat")
+
+        qty    = pos["qty"]
         action = "SELL" if current_state == "long" else "BUY"
 
         self.broker.cancel_all_orders(ticker)
-        trade = self.broker.place_market_order(ticker, action, qty)
-        if not trade:
-            return False
+        return self.broker.place_market_order(ticker, action, qty)
 
-        # Wait for fill confirmation
-        for _ in range(20):
-            self.broker.sleep(0.5)
-            if trade.orderStatus.status in ("Filled", "Inactive"):
-                break
+    # ── open ──────────────────────────────────────────────────────────────────
 
-        self.state.mark_flat(ticker)
-        logger.info(f"{ticker}: closed {current_state} {qty} shares")
-        return True
-
-    def _open_position(self, ticker: str, target_state: str, cfg, last_close: float) -> bool:
+    def _open_position(
+        self,
+        ticker:       str,
+        target_state: str,
+        cfg,
+        last_close:   float,
+    ) -> Optional[FillResult]:
+        # Get best available price for sizing
         price = self.polygon.get_latest_price(ticker) or last_close
-        if not price:
-            logger.error(f"{ticker}: cannot get price for position sizing")
-            return False
+        if not price or price <= 0:
+            logger.error(f"{ticker}: cannot determine price — skipping open")
+            return FillResult(success=False, status="no_price")
 
-        qty = self.broker.calc_shares(cfg.dollar_amount, price)
+        qty = IBKRConnection.calc_shares(cfg.dollar_amount, price)
         if qty <= 0:
-            logger.error(f"{ticker}: position size 0 — dollar_amount={cfg.dollar_amount} price={price}")
-            return False
+            logger.error(
+                f"{ticker}: position size=0 "
+                f"(dollar_amount={cfg.dollar_amount}, price={price:.2f}) — skipping"
+            )
+            return FillResult(success=False, status="zero_qty")
 
         action = "BUY" if target_state == "long" else "SELL"
 
         if cfg.order_type == "limit":
             bid, ask = self.broker.get_bid_ask(ticker)
-            limit_price = ask if action == "BUY" else bid
-            if not limit_price:
-                limit_price = price
-            trade = self.broker.place_limit_order(ticker, action, qty, limit_price)
-        else:
-            trade = self.broker.place_market_order(ticker, action, qty)
+            limit_px = (ask if action == "BUY" else bid) or price
+            return self.broker.place_limit_order(ticker, action, qty, limit_px)
 
-        if not trade:
-            return False
+        return self.broker.place_market_order(ticker, action, qty)
 
-        logger.info(f"{ticker}: opened {target_state} {qty}@~{price:.2f}")
-        return True
+    # ── helpers ───────────────────────────────────────────────────────────────
+
+    @staticmethod
+    def _fill_dict(r: FillResult) -> dict:
+        return {
+            "success":    r.success,
+            "qty":        r.filled_qty,
+            "avg_price":  r.avg_price,
+            "status":     r.status,
+            "order_id":   r.order_id,
+        }

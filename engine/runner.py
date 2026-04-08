@@ -1,20 +1,28 @@
 """
-Main algo engine loop.
+ERGA-SS Algo Engine — main execution loop.
 
-Cycle per timeframe candle close:
-1. Fetch completed candles from Polygon for each active ticker
-2. Run indicator — evaluate on last closed bar
-3. Pass any signal to SignalProcessor
-4. Log results
+Candle-close aligned evaluation:
+  Bars are evaluated within 30 seconds of their expected close time (ET session-aligned).
+  This minimises signal latency while guaranteeing we only act on completed bars.
 
-Earnings daily scan runs once per day at market open.
-Market hours: US Eastern 9:30–16:00, Monday–Friday only.
+Cycle (runs every 15 seconds):
+  1. Reconnect check
+  2. Earnings daily scan (once per day, 09:35 ET)
+  3. Market hours gate
+  4. For each active ticker: check if a new bar has closed → evaluate
+
+Hot-reload:
+  - Config changes (params, timeframe, dollar_amount) take effect on the next cycle
+  - Timeframe change → indicator instance is reset
+  - Param change → params applied in-place without reset
 """
 
 import logging
 import time
-from datetime import datetime, timezone, timedelta
+import math
+from datetime import datetime, timezone, timedelta, time as dtime
 from typing import Dict, Optional
+from zoneinfo import ZoneInfo
 
 from config.store import ConfigStore
 from engine.broker.connection import IBKRConnection
@@ -28,46 +36,82 @@ from indicator.erga_indicator import ERGAIndicator
 
 logger = logging.getLogger(__name__)
 
-TIMEFRAME_SECONDS = {
-    "1m": 60,
-    "5m": 300,
-    "15m": 900,
-    "30m": 1800,
-    "1H": 3600,
-    "2H": 7200,
-    "3H": 10800,
-    "4H": 14400,
-    "1D": 86400,
+ET  = ZoneInfo("America/New_York")
+UTC = timezone.utc
+
+CYCLE_SLEEP = 15  # seconds between main loop iterations
+
+TIMEFRAME_MINUTES: Dict[str, int] = {
+    "1m":  1,
+    "5m":  5,
+    "15m": 15,
+    "30m": 30,
+    "1H":  60,
+    "2H":  120,
+    "3H":  180,
+    "4H":  240,
+    "1D":  1440,
 }
 
-# US Eastern offset (approximate: EDT=-4, EST=-5)
-def _utc_to_et(utc_dt: datetime) -> datetime:
-    offset = -4 if 3 <= utc_dt.month <= 11 else -5
-    return utc_dt + timedelta(hours=offset)
+MARKET_OPEN  = dtime(9, 30)
+MARKET_CLOSE = dtime(16, 0)
+EARNINGS_SCAN_HOUR   = 9
+EARNINGS_SCAN_MINUTE = 35
 
-def _is_market_hours(utc_now: datetime) -> bool:
-    et = _utc_to_et(utc_now)
-    if et.weekday() >= 5:  # Saturday=5, Sunday=6
+LOG_MAX_SIGNALS  = 500
+LOG_MAX_TRADES   = 500
+LOG_MAX_EARNINGS = 200
+
+
+def _now_et() -> datetime:
+    return datetime.now(UTC).astimezone(ET)
+
+
+def _is_market_hours(now_et: Optional[datetime] = None) -> bool:
+    et = now_et or _now_et()
+    if et.weekday() >= 5:
         return False
-    t = et.time()
-    from datetime import time as dtime
-    return dtime(9, 30) <= t <= dtime(16, 0)
+    return MARKET_OPEN <= et.time() <= MARKET_CLOSE
+
+
+def _next_bar_close_utc(timeframe: str, now_utc: Optional[datetime] = None) -> Optional[datetime]:
+    """
+    Return the UTC timestamp of the next expected bar close for the given timeframe,
+    aligned to ET session open (09:30 ET).
+    Returns None for daily bars (evaluated once per day, handled separately).
+    """
+    if timeframe == "1D":
+        return None
+
+    mins = TIMEFRAME_MINUTES.get(timeframe, 60)
+    now  = now_utc or datetime.now(UTC)
+    et   = now.astimezone(ET)
+
+    session_open_et = et.replace(hour=9, minute=30, second=0, microsecond=0)
+    delta_mins = (et - session_open_et).total_seconds() / 60
+
+    if delta_mins < 0:
+        # Before session open today — first close is session_open + mins
+        next_close_et = session_open_et + timedelta(minutes=mins)
+    else:
+        # How many complete bars have elapsed since session open?
+        bars_elapsed  = math.floor(delta_mins / mins)
+        next_close_et = session_open_et + timedelta(minutes=(bars_elapsed + 1) * mins)
+
+    return next_close_et.astimezone(UTC)
 
 
 class AlgoRunner:
-    """
-    Orchestrates the full algo engine.
-    Call register_indicator() for each indicator implementation before start().
-    """
 
     def __init__(self, store: ConfigStore, broker: IBKRConnection):
-        self.store = store
-        self.broker = broker
+        self.store   = store
+        self.broker  = broker
         self.polygon = PolygonData()
-        self.earnings_checker = EarningsChecker(window_days=3)
-        self.state = PositionStateMachine(store, broker)
-        self.earnings_filter = EarningsFilter(
-            checker=self.earnings_checker,
+
+        earnings_checker = EarningsChecker(window_days=3)
+        self.state    = PositionStateMachine(store, broker)
+        self.earnings = EarningsFilter(
+            checker=earnings_checker,
             store=store,
             broker=broker,
             state=self.state,
@@ -78,142 +122,200 @@ class AlgoRunner:
             store=store,
             broker=broker,
             state=self.state,
-            earnings=self.earnings_filter,
+            earnings=self.earnings,
             polygon=self.polygon,
         )
 
-        # ticker -> indicator instance
-        self._indicators: Dict[str, BaseIndicator] = {}
-        self._running = False
-        self._last_eval: Dict[str, float] = {}       # ticker -> last eval unix timestamp
-        self._last_timeframe: Dict[str, str] = {}    # ticker -> last known timeframe
-        self._last_earnings_scan: Optional[datetime] = None
+        self._indicators:    Dict[str, BaseIndicator] = {}
+        self._last_timeframe: Dict[str, str]          = {}
+        self._last_params:    Dict[str, dict]         = {}
+        # next_eval[ticker] = next expected bar close UTC (+ buffer)
+        self._next_eval:      Dict[str, datetime]     = {}
 
-        # Logs — dashboard reads these
-        self.signal_log: list = []
-        self.trade_log: list = []
+        self._running               = False
+        self._last_earnings_scan_et: Optional[datetime] = None
+
+        # shared logs — read by dashboard API
+        self.signal_log:   list = []
+        self.trade_log:    list = []
         self.earnings_log: list = []
 
+    # ── indicator registration ────────────────────────────────────────────────
+
     def register_indicator(self, ticker: str, indicator: BaseIndicator):
-        self._indicators[ticker] = indicator
+        self._indicators[ticker]     = indicator
+        self._last_timeframe[ticker] = indicator.timeframe
+        self._last_params[ticker]    = dict(indicator.params)
         logger.info(f"Registered indicator for {ticker}")
 
-    def reinit_indicator(self, ticker: str, indicator: BaseIndicator):
-        """Hot-swap indicator instance."""
-        self._indicators[ticker] = indicator
-        self._last_eval.pop(ticker, None)
-        self._last_timeframe.pop(ticker, None)
-        logger.info(f"{ticker}: indicator re-initialised")
+    def _reset_indicator(self, ticker: str, cfg) -> BaseIndicator:
+        ind = ERGAIndicator(ticker, cfg.timeframe, cfg.indicator_params)
+        self._indicators[ticker]     = ind
+        self._last_timeframe[ticker] = cfg.timeframe
+        self._last_params[ticker]    = dict(cfg.indicator_params)
+        self._next_eval.pop(ticker, None)
+        logger.info(f"{ticker}: indicator reset (timeframe={cfg.timeframe})")
+        return ind
+
+    # ── main loop ─────────────────────────────────────────────────────────────
 
     def start(self):
         if not self.broker.ensure_connected():
-            raise RuntimeError("Cannot connect to IB Gateway")
+            raise RuntimeError("Cannot connect to IB Gateway — check that IB Gateway is running")
 
+        logger.info(
+            f"ERGA-SS engine starting | "
+            f"port={self.broker.port} | "
+            f"mode={'PAPER' if self.broker.port == 4002 else 'LIVE'} | "
+            f"tickers={len(self.store.get_all())}"
+        )
+
+        # Rebuild position state from IBKR before processing any signals
         self.state.sync_from_ibkr()
-        self._running = True
-        logger.info("Algo engine started")
 
+        self._running = True
         try:
             while self._running:
-                self._run_cycle()
-                self.broker.sleep(1)
+                try:
+                    self._run_cycle()
+                except Exception as e:
+                    logger.exception(f"Unhandled error in run cycle: {e}")
+                self.broker.sleep(CYCLE_SLEEP)
         except KeyboardInterrupt:
             logger.info("Engine stopped by user")
         finally:
             self._running = False
             self.broker.disconnect()
+            logger.info("Engine stopped")
 
     def stop(self):
         self._running = False
 
     def _run_cycle(self):
-        now = time.time()
-        now_dt = datetime.now(timezone.utc)
+        now_utc = datetime.now(UTC)
+        now_et  = now_utc.astimezone(ET)
 
-        # Earnings daily scan — once per day at market open (~14:30 UTC)
-        if (
-            self._last_earnings_scan is None
-            or (now_dt - self._last_earnings_scan).total_seconds() > 86400
-        ) and now_dt.hour == 14 and now_dt.minute == 30:
-            self.earnings_filter.daily_scan()
-            self._last_earnings_scan = now_dt
-
-        # Reconnect check
+        # Reconnect if dropped
         if not self.broker.is_connected:
-            logger.warning("Connection lost — attempting reconnect")
+            logger.warning("Connection lost — reconnecting")
             if self.broker.reconnect():
                 self.state.sync_from_ibkr()
+            else:
+                return  # Skip cycle if reconnect failed
 
-        # Market hours gate — skip signal evaluation outside US market hours
-        if not _is_market_hours(now_dt):
+        # Earnings daily scan — once per day, 09:35 ET
+        self._maybe_run_earnings_scan(now_et)
+
+        if not _is_market_hours(now_et):
             return
 
         for cfg in self.store.get_active():
-            ticker = cfg.ticker
-            tf = cfg.timeframe
-            interval = TIMEFRAME_SECONDS.get(tf, 3600)
-            last = self._last_eval.get(ticker, 0)
+            try:
+                self._eval_ticker(cfg, now_utc)
+            except Exception as e:
+                logger.exception(f"{cfg.ticker}: unexpected error in eval: {e}")
 
-            if now - last < interval:
-                continue
+    # ── earnings scan ─────────────────────────────────────────────────────────
 
-            self._eval_ticker(ticker, cfg)
-            self._last_eval[ticker] = now
-
-    def _eval_ticker(self, ticker: str, cfg):
-        indicator = self._indicators.get(ticker)
-
-        # Re-instantiate if timeframe changed (full reset needed)
-        prev_tf = self._last_timeframe.get(ticker)
-        if prev_tf and prev_tf != cfg.timeframe:
-            logger.info(f"{ticker}: timeframe changed {prev_tf} → {cfg.timeframe}, re-instantiating indicator")
-            indicator = ERGAIndicator(ticker, cfg.timeframe, cfg.indicator_params)
-            self.reinit_indicator(ticker, indicator)
-
-        self._last_timeframe[ticker] = cfg.timeframe
-
-        if not indicator:
-            logger.debug(f"{ticker}: no indicator registered — skipping")
+    def _maybe_run_earnings_scan(self, now_et: datetime):
+        if now_et.weekday() >= 5:
+            return
+        scan_time = dtime(EARNINGS_SCAN_HOUR, EARNINGS_SCAN_MINUTE)
+        if now_et.time() < scan_time:
+            return
+        today = now_et.date()
+        if self._last_earnings_scan_et and self._last_earnings_scan_et.date() == today:
             return
 
-        # Hot-reload params if changed
-        if indicator.params != cfg.indicator_params:
-            indicator.update_params(cfg.indicator_params)
+        self.earnings.daily_scan()
+        self._last_earnings_scan_et = now_et
 
-        candles = self.polygon.fetch_candles(ticker, cfg.timeframe)
+    # ── per-ticker evaluation ─────────────────────────────────────────────────
+
+    def _eval_ticker(self, cfg, now_utc: datetime):
+        ticker = cfg.ticker
+        tf     = cfg.timeframe
+
+        # ── hot-reload: timeframe change → full reset ─────────────────────────
+        if self._last_timeframe.get(ticker) != tf:
+            self._reset_indicator(ticker, cfg)
+
+        ind = self._indicators.get(ticker)
+        if ind is None:
+            ind = self._reset_indicator(ticker, cfg)
+
+        # ── hot-reload: params change → in-place update ───────────────────────
+        if cfg.indicator_params != self._last_params.get(ticker):
+            ind.update_params(cfg.indicator_params)
+            self._last_params[ticker] = dict(cfg.indicator_params)
+            logger.info(f"{ticker}: indicator params hot-reloaded")
+
+        # ── candle-close aligned timing ───────────────────────────────────────
+        if tf == "1D":
+            # Daily: evaluate once per day at market open + buffer
+            et = now_utc.astimezone(ET)
+            today = et.date()
+            last = self._next_eval.get(ticker)
+            if last and last.astimezone(ET).date() == today:
+                return  # already evaluated today
+            if et.time() < dtime(9, 35):
+                return  # wait for daily bar to be confirmed
+        else:
+            # Intraday: evaluate within 30s of each bar close
+            next_close = _next_bar_close_utc(tf, now_utc)
+            eval_at    = next_close + timedelta(seconds=30)
+            last       = self._next_eval.get(ticker)
+            if now_utc < eval_at:
+                return  # bar hasn't closed yet
+            if last and last >= eval_at:
+                return  # already evaluated this bar
+
+        # ── fetch + evaluate ──────────────────────────────────────────────────
+        candles = self.polygon.fetch_candles(ticker, tf)
         if candles is None or candles.empty:
-            logger.warning(f"{ticker}: no candles — skipping")
+            logger.warning(f"{ticker}: no candles returned — skipping")
             return
 
-        signal = indicator.evaluate(candles)
+        signal = ind.evaluate(candles)
+
+        # Mark evaluated for this bar
+        if tf == "1D":
+            self._next_eval[ticker] = now_utc
+        else:
+            self._next_eval[ticker] = _next_bar_close_utc(tf, now_utc) + timedelta(seconds=30)
+
         if signal is None:
             return
 
         result = self.processor.handle(signal)
-        self._append_signal_log(result)
+        self._log_signal(result, cfg)
 
-        if result["outcome"] == "executed":
-            self._append_trade_log(result, cfg)
+    # ── logging ───────────────────────────────────────────────────────────────
 
-    def _append_signal_log(self, result: dict):
-        self.signal_log.append(result)
-        if len(self.signal_log) > 200:
-            self.signal_log = self.signal_log[-200:]
-
-    def _append_trade_log(self, result: dict, cfg):
-        entry = {**result, "dollar_amount": cfg.dollar_amount, "order_type": cfg.order_type}
-        self.trade_log.append(entry)
-        if len(self.trade_log) > 200:
-            self.trade_log = self.trade_log[-200:]
-
-    def append_earnings_log(self, ticker: str, action: str, earnings_date: str, pnl: float = 0):
+    def _log_signal(self, result: dict, cfg):
         entry = {
-            "timestamp": datetime.utcnow().isoformat(),
-            "ticker": ticker,
+            **result,
+            "timeframe":     cfg.timeframe,
+            "dollar_amount": cfg.dollar_amount,
+            "order_type":    cfg.order_type,
+        }
+        self.signal_log.append(entry)
+        if len(self.signal_log) > LOG_MAX_SIGNALS:
+            self.signal_log = self.signal_log[-LOG_MAX_SIGNALS:]
+
+        if result.get("outcome") == "executed":
+            self.trade_log.append(entry)
+            if len(self.trade_log) > LOG_MAX_TRADES:
+                self.trade_log = self.trade_log[-LOG_MAX_TRADES:]
+
+    def append_earnings_log(self, ticker: str, action: str, earnings_date: str, pnl: float = 0.0):
+        entry = {
+            "timestamp":    datetime.now(UTC).isoformat(),
+            "ticker":       ticker,
             "earnings_date": earnings_date,
-            "action": action,
-            "pnl": pnl,
+            "action":       action,
+            "pnl":          pnl,
         }
         self.earnings_log.append(entry)
-        if len(self.earnings_log) > 100:
-            self.earnings_log = self.earnings_log[-100:]
+        if len(self.earnings_log) > LOG_MAX_EARNINGS:
+            self.earnings_log = self.earnings_log[-LOG_MAX_EARNINGS:]
