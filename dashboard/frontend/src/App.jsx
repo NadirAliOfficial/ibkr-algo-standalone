@@ -107,27 +107,35 @@ function StatusBar() {
 function ParamsEditor({ params, onChange }) {
   const [raw, setRaw] = useState(JSON.stringify(params || {}, null, 2));
   const [error, setError] = useState("");
+  const [saved, setSaved] = useState(false);
 
-  const handleBlur = () => {
+  const handleSave = () => {
     try {
       const parsed = JSON.parse(raw);
       setError("");
       onChange(parsed);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
     } catch {
       setError("Invalid JSON");
     }
   };
 
   return (
-    <div>
+    <div className="space-y-2">
       <textarea
-        className={`bg-gray-900 border ${error ? "border-red-500" : "border-gray-600"} rounded px-2 py-1 text-xs font-mono w-full h-20 resize-none`}
+        className={`bg-gray-900 border ${error ? "border-red-500" : "border-gray-600"} rounded px-2 py-1 text-xs font-mono w-full h-20 resize-none focus:outline-none focus:border-blue-500`}
         value={raw}
-        onChange={e => setRaw(e.target.value)}
-        onBlur={handleBlur}
+        onChange={e => { setRaw(e.target.value); setSaved(false); }}
         placeholder='{"slow_len": 50, "fast_len": 15}'
       />
       {error && <p className="text-red-400 text-xs">{error}</p>}
+      <button
+        onClick={handleSave}
+        className={`px-3 py-1 rounded text-xs font-medium transition ${saved ? "bg-green-700 text-green-200" : "bg-blue-600 hover:bg-blue-700 text-white"}`}
+      >
+        {saved ? "Saved!" : "Save params"}
+      </button>
     </div>
   );
 }
