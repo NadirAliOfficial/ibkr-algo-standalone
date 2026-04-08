@@ -41,9 +41,11 @@ def list_tickers():
 
 @router.post("/")
 def add_ticker(payload: TickerPayload):
+    if not payload.ticker or not payload.ticker.strip():
+        raise HTTPException(400, "Ticker symbol cannot be empty")
     store = _get_store()
     cfg = TickerConfig(
-        ticker=payload.ticker.upper(),
+        ticker=payload.ticker.strip().upper(),
         active=payload.active,
         dollar_amount=payload.dollar_amount,
         timeframe=payload.timeframe,
