@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 ET  = ZoneInfo("America/New_York")
 UTC = timezone.utc
 
-CYCLE_SLEEP = 15  # seconds between main loop iterations
+CYCLE_SLEEP = 1  # seconds between main loop iterations (must stay ≤1 for ib_insync event loop)
 
 TIMEFRAME_MINUTES: Dict[str, int] = {
     "1m":  1,

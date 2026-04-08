@@ -5,7 +5,16 @@ from config.store import ConfigStore
 from config.schema import TickerConfig
 
 router = APIRouter()
-store = ConfigStore()
+_store: ConfigStore = None
+
+
+def set_store(s: ConfigStore):
+    global _store
+    _store = s
+
+
+def _get_store() -> ConfigStore:
+    return _store or ConfigStore()
 
 
 class TickerPayload(BaseModel):
@@ -27,11 +36,12 @@ class BulkEditPayload(BaseModel):
 
 @router.get("/")
 def list_tickers():
-    return [c.to_dict() for c in store.get_all()]
+    return [c.to_dict() for c in _get_store().get_all()]
 
 
 @router.post("/")
 def add_ticker(payload: TickerPayload):
+    store = _get_store()
     cfg = TickerConfig(
         ticker=payload.ticker.upper(),
         active=payload.active,
@@ -46,6 +56,7 @@ def add_ticker(payload: TickerPayload):
 
 @router.put("/{ticker}")
 def update_ticker(ticker: str, payload: TickerPayload):
+    store = _get_store()
     cfg = store.get(ticker.upper())
     if not cfg:
         raise HTTPException(404, f"{ticker} not found")
@@ -60,6 +71,7 @@ def update_ticker(ticker: str, payload: TickerPayload):
 
 @router.delete("/{ticker}")
 def remove_ticker(ticker: str):
+    store = _get_store()
     cfg = store.get(ticker.upper())
     if not cfg:
         raise HTTPException(404, f"{ticker} not found")
@@ -69,6 +81,7 @@ def remove_ticker(ticker: str):
 
 @router.post("/bulk-edit")
 def bulk_edit(payload: BulkEditPayload):
+    store = _get_store()
     updated = []
     for t in payload.tickers:
         cfg = store.get(t.upper())

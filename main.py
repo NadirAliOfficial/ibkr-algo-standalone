@@ -41,7 +41,7 @@ def main():
     from engine.runner import AlgoRunner
     from indicator.erga_indicator import ERGAIndicator
     from dashboard.backend.main import app
-    from dashboard.backend.routers import logs, system, positions
+    from dashboard.backend.routers import logs, system, positions, tickers
 
     # ── config & broker ───────────────────────────────────────────────────────
     store = ConfigStore()
@@ -75,6 +75,7 @@ def main():
     system.set_runner(runner)
     system.set_broker(broker)
     positions.set_broker(broker)
+    tickers.set_store(store)
 
     # ── launch dashboard in background thread ─────────────────────────────────
     dash_host = os.getenv("DASHBOARD_HOST", "0.0.0.0")

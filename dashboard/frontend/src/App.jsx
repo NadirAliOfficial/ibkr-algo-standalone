@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { QueryClient, QueryClientProvider, useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast, { Toaster } from "react-hot-toast";
-import { getTickers, addTicker, updateTicker, deleteTicker, bulkEdit, getPositions, getSignalLog, getTradeLog, getStatus } from "./api";
-import { getEarningsLog } from "./api";
+import { getTickers, addTicker, updateTicker, deleteTicker, bulkEdit, getPositions, getSignalLog, getTradeLog, getStatus, clearHalt, getEarningsLog } from "./api";
 
 const qc = new QueryClient();
 
@@ -10,15 +9,34 @@ const TIMEFRAMES = ["1m", "5m", "15m", "30m", "1H", "2H", "3H", "4H", "1D"];
 const STATE_COLORS = { WAITING: "bg-gray-500", LONG: "bg-green-600", SHORT: "bg-red-600", BLOCKED: "bg-yellow-600" };
 
 function StatusBar() {
+  const qclient = useQueryClient();
   const { data } = useQuery({ queryKey: ["status"], queryFn: getStatus, refetchInterval: 10000 });
+  const haltMut = useMutation({
+    mutationFn: clearHalt,
+    onSuccess: (_, ticker) => { qclient.invalidateQueries(["status"]); toast.success(`Halt cleared: ${ticker}`); },
+    onError: () => toast.error("Failed to clear halt"),
+  });
   if (!data) return null;
   return (
-    <div className="flex gap-6 text-sm px-4 py-2 bg-gray-900 border-b border-gray-700 text-gray-300 flex-wrap">
+    <div className="flex gap-6 text-sm px-4 py-2 bg-gray-900 border-b border-gray-700 text-gray-300 flex-wrap items-center">
       <span>Engine: <b className={data.engine_running ? "text-green-400" : "text-red-400"}>{data.engine_running ? "RUNNING" : "STOPPED"}</b></span>
       <span>IBKR: <b className={data.ibkr_connected ? "text-green-400" : "text-red-400"}>{data.ibkr_connected ? "CONNECTED" : "DISCONNECTED"}</b></span>
       <span>Mode: <b className={data.account_mode === "paper" ? "text-yellow-400" : "text-green-400"}>{(data.account_mode || "—").toUpperCase()}</b></span>
       <span>Active: <b className="text-white">{data.active_tickers}</b></span>
-      {data.halted_tickers?.length > 0 && <span className="text-yellow-400">Halted: {data.halted_tickers.join(", ")}</span>}
+      {data.halted_tickers?.length > 0 && (
+        <span className="flex items-center gap-2 flex-wrap">
+          <span className="text-yellow-400">Halted:</span>
+          {data.halted_tickers.map(t => (
+            <span key={t} className="flex items-center gap-1">
+              <span className="text-yellow-300 font-mono">{t}</span>
+              <button
+                className="text-xs bg-yellow-700 hover:bg-yellow-600 text-white px-1.5 py-0.5 rounded"
+                onClick={() => haltMut.mutate(t)}
+              >clear</button>
+            </span>
+          ))}
+        </span>
+      )}
       {data.last_signal && (
         <span className="text-gray-400">Last: <b className="text-white">{data.last_signal.ticker}</b> {data.last_signal.signal} — {data.last_signal.outcome}</span>
       )}

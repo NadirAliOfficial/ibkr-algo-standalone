@@ -16,7 +16,7 @@
     "timeframe": "1H",
     "indicator_params": {},
     "order_type": "market",
-    "state": "flat",
+    "state": "long",
     "blocked": false
   },
   {

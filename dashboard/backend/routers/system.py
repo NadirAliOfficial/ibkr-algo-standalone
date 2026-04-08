@@ -45,3 +45,11 @@ def status():
         "uptime_seconds": int((datetime.utcnow() - _start_time).total_seconds()),
         "last_signal": _runner.signal_log[-1] if _runner and _runner.signal_log else None,
     }
+
+
+@router.post("/clear-halt/{ticker}")
+def clear_halt(ticker: str):
+    if not _runner:
+        return {"ok": False, "reason": "runner not initialised"}
+    _runner.state.clear_halt(ticker.upper())
+    return {"ok": True, "ticker": ticker.upper()}
