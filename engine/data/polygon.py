@@ -38,9 +38,9 @@ NATIVE_TIMEFRAMES = {
 }
 
 RESAMPLE_TIMEFRAMES = {
-    "2H": ("1H", "2h"),
-    "3H": ("1H", "3h"),
-    "4H": ("1H", "4h"),
+    "2H": ("30m", 2),
+    "3H": ("30m", 3),
+    "4H": ("30m", 4),
 }
 
 WARMUP_BARS = 500   # minimum bars fed to indicator for convergence
@@ -70,10 +70,10 @@ class PolygonData:
         if timeframe in NATIVE_TIMEFRAMES:
             df = self._fetch_native(ticker, timeframe, warmup_bars)
         elif timeframe in RESAMPLE_TIMEFRAMES:
-            src_tf, rule = RESAMPLE_TIMEFRAMES[timeframe]
-            df = self._fetch_native(ticker, src_tf, warmup_bars * int(rule[0]))
+            src_tf, n_hours = RESAMPLE_TIMEFRAMES[timeframe]
+            df = self._fetch_native(ticker, src_tf, warmup_bars * n_hours * 2)
             if df is not None:
-                df = self._resample_et(df, rule)
+                df = self._resample_et(df, n_hours)
         else:
             logger.error(f"Unknown timeframe: {timeframe}")
             return None
@@ -149,24 +149,22 @@ class PolygonData:
 
     # ── ET session-aligned resampling ─────────────────────────────────────────
 
-    def _resample_et(self, df: pd.DataFrame, rule: str) -> pd.DataFrame:
+    def _resample_et(self, df: pd.DataFrame, n_hours: int) -> pd.DataFrame:
         """
-        Resample 1H bars into N-hour bars aligned to ET session open (09:30).
+        Resample 30m bars into N-hour bars aligned to ET session open (09:30).
 
-        TradingView builds multi-hour bars by grouping 1H bars from the session
-        open (09:30 ET). This must match exactly or indicator bar boundaries differ.
+        Uses 30m source data so session-aligned 1H boundaries (09:30, 10:30...)
+        can be constructed exactly, matching TradingView's regular session bars.
 
-        Strategy:
-          1. Convert index to ET
-          2. For each trading day, group 1H bars into chunks of N hours from 09:30
-          3. OHLCV aggregate: O=first, H=max, L=min, C=last, V=sum
-          4. Convert result index back to UTC
+        Each N-hour bar starts at 09:30 + k*N hours. Only RTH bars are included
+        (09:30 <= bar_start < 16:00 ET, Mon-Fri).
         """
-        n_hours = int(rule[0])
-
-        # Work in ET
         df_et = df.copy()
         df_et.index = df_et.index.tz_convert(ET)
+
+        session_open_time  = pd.Timedelta(hours=9, minutes=30)
+        session_close_time = pd.Timedelta(hours=16)
+        n_td               = pd.Timedelta(hours=n_hours)
 
         groups = []
         dates  = sorted(set(df_et.index.date))
@@ -176,21 +174,20 @@ class PolygonData:
             if day_bars.empty:
                 continue
 
-            # Session open anchor: 09:30 ET on this day
-            session_open = pd.Timestamp(day, tz=ET).replace(hour=9, minute=30)
+            session_open  = pd.Timestamp(day, tz=ET) + session_open_time
+            session_close = pd.Timestamp(day, tz=ET) + session_close_time
 
-            # Assign each bar to a bucket: floor((bar_start - session_open) / n_hours)
-            delta_hours = (day_bars.index - session_open).total_seconds() / 3600
-            day_bars["_bucket"] = (delta_hours // n_hours).astype(int)
-
-            # Only keep bars within market hours (bucket >= 0)
-            day_bars = day_bars[day_bars["_bucket"] >= 0]
-            if day_bars.empty:
+            # Only RTH bars: [09:30, 16:00)
+            rth = day_bars[(day_bars.index >= session_open) & (day_bars.index < session_close)]
+            if rth.empty:
                 continue
 
-            # Aggregate each bucket
-            for bucket, chunk in day_bars.groupby("_bucket"):
-                bar_time = session_open + pd.Timedelta(hours=int(bucket) * n_hours)
+            delta_hours = (rth.index - session_open).total_seconds() / 3600
+            rth = rth.copy()
+            rth["_bucket"] = (delta_hours // n_hours).astype(int)
+
+            for bucket, chunk in rth.groupby("_bucket"):
+                bar_time = session_open + n_td * int(bucket)
                 groups.append({
                     "time":   bar_time.tz_convert(UTC),
                     "open":   chunk["open"].iloc[0],
@@ -203,8 +200,7 @@ class PolygonData:
         if not groups:
             return pd.DataFrame()
 
-        result = pd.DataFrame(groups).set_index("time").sort_index()
-        return result
+        return pd.DataFrame(groups).set_index("time").sort_index()
 
     # ── live candle exclusion ─────────────────────────────────────────────────
 
