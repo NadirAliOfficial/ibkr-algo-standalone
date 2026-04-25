@@ -31,6 +31,7 @@ from engine.data.earnings import EarningsChecker
 from engine.algo.state_machine import PositionStateMachine
 from engine.algo.earnings_filter import EarningsFilter
 from engine.algo.signal_processor import SignalProcessor
+from engine.log_store import LogStore
 from indicator.base import BaseIndicator
 from indicator.erga_indicator import ERGAIndicator
 
@@ -135,10 +136,14 @@ class AlgoRunner:
         self._running               = False
         self._last_earnings_scan_et: Optional[datetime] = None
 
-        # shared logs — read by dashboard API
-        self.signal_log:   list = []
-        self.trade_log:    list = []
-        self.earnings_log: list = []
+        # shared logs — read by dashboard API (Redis-backed with in-memory fallback)
+        self._signal_store   = LogStore("signal")
+        self._trade_store    = LogStore("trade")
+        self._earnings_store = LogStore("earnings")
+
+        self.signal_log   = self._signal_store._mem
+        self.trade_log    = self._trade_store._mem
+        self.earnings_log = self._earnings_store._mem
 
     # ── indicator registration ────────────────────────────────────────────────
 
@@ -299,23 +304,20 @@ class AlgoRunner:
             "dollar_amount": cfg.dollar_amount,
             "order_type":    cfg.order_type,
         }
-        self.signal_log.append(entry)
-        if len(self.signal_log) > LOG_MAX_SIGNALS:
-            self.signal_log = self.signal_log[-LOG_MAX_SIGNALS:]
+        self._signal_store.append(entry)
+        self.signal_log = self._signal_store._mem
 
         if result.get("outcome") == "executed":
-            self.trade_log.append(entry)
-            if len(self.trade_log) > LOG_MAX_TRADES:
-                self.trade_log = self.trade_log[-LOG_MAX_TRADES:]
+            self._trade_store.append(entry)
+            self.trade_log = self._trade_store._mem
 
     def append_earnings_log(self, ticker: str, action: str, earnings_date: str, pnl: float = 0.0):
         entry = {
-            "timestamp":    datetime.now(UTC).isoformat(),
-            "ticker":       ticker,
+            "timestamp":     datetime.now(UTC).isoformat(),
+            "ticker":        ticker,
             "earnings_date": earnings_date,
-            "action":       action,
-            "pnl":          pnl,
+            "action":        action,
+            "pnl":           pnl,
         }
-        self.earnings_log.append(entry)
-        if len(self.earnings_log) > LOG_MAX_EARNINGS:
-            self.earnings_log = self.earnings_log[-LOG_MAX_EARNINGS:]
+        self._earnings_store.append(entry)
+        self.earnings_log = self._earnings_store._mem

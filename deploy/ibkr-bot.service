@@ -1,0 +1,17 @@
+[Unit]
+Description=IBKR Algo Trading Bot
+After=network.target ibkr-dashboard.service
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/ibkr-algo
+EnvironmentFile=/opt/ibkr-algo/.env
+ExecStart=/opt/ibkr-algo/venv/bin/python3 main.py
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

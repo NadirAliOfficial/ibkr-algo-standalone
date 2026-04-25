@@ -1,0 +1,17 @@
+[Unit]
+Description=IBKR Algo Dashboard (FastAPI)
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/ibkr-algo
+EnvironmentFile=/opt/ibkr-algo/.env
+ExecStart=/opt/ibkr-algo/venv/bin/uvicorn dashboard.backend.main:app --host 127.0.0.1 --port 8000
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
