@@ -11,6 +11,7 @@ Usage:
   IBKR_PORT=4001 LOG_LEVEL=DEBUG python main.py
 """
 
+import asyncio
 import logging
 import os
 import threading
@@ -36,6 +37,12 @@ def _start_dashboard(app, host: str, port: int):
 
 
 def main():
+    # ib_insync requires an event loop in the main thread (Python 3.10+ no longer auto-creates one)
+    try:
+        asyncio.get_event_loop()
+    except RuntimeError:
+        asyncio.set_event_loop(asyncio.new_event_loop())
+
     from config.store import ConfigStore
     from engine.broker.connection import IBKRConnection
     from engine.runner import AlgoRunner

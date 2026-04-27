@@ -14,6 +14,7 @@ Order safety:
   - On reconnect: cancels all pending orders, re-syncs positions
 """
 
+import asyncio
 import os
 import time
 import math
@@ -57,6 +58,12 @@ class IBKRConnection:
 
     def connect(self) -> bool:
         try:
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_closed():
+                    raise RuntimeError
+            except RuntimeError:
+                asyncio.set_event_loop(asyncio.new_event_loop())
             self.ib.connect(
                 self.host, self.port,
                 clientId=self.client_id,
