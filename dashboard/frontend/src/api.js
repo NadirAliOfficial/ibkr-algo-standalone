@@ -37,3 +37,4 @@ export const getStatus = () => call(() => getApi().get("/system/status"));
 export const clearHalt = (ticker) => call(() => getApi().post(`/system/clear-halt/${ticker}`));
 export const getEarningsLog = () => call(() => getApi().get("/logs/earnings"));
 export const getMarket = () => call(() => getApi().get("/system/market"));
+export const getEngineLog = () => call(() => getApi().get("/logs/engine?lines=150"));

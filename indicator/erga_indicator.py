@@ -100,13 +100,27 @@ class ERGAIndicator(BaseIndicator):
             self._last_bar_time = bar_time
 
             desired = self._erga.trend  # 1 = long, -1 = short
+            trend_str = "LONG" if desired == 1 else "SHORT"
+            quality_ok = self._erga.quality >= self._erga.min_quality
 
             # Confirmation logic (mirrors client's erga_standalone.py)
             if self._pending_trend != desired:
                 self._pending_trend = desired
                 self._confirm_count = 1
+                logger.info(
+                    f"{self.ticker} [{self.timeframe}]: crossover detected → {trend_str} "
+                    f"| ss={self._erga.ss_line:.4f} | ER={self._erga.er:.2f} "
+                    f"| quality={self._erga.quality:.1f}/{ self._erga.min_quality} {'✓' if quality_ok else '✗'} "
+                    f"| confirming 1/{self._confirm_bars}"
+                )
             else:
                 self._confirm_count += 1
+                if self._confirm_count < self._confirm_bars:
+                    logger.info(
+                        f"{self.ticker} [{self.timeframe}]: confirming {trend_str} "
+                        f"| {self._confirm_count}/{self._confirm_bars} bars "
+                        f"| ss={self._erga.ss_line:.4f} | quality={self._erga.quality:.1f} {'✓' if quality_ok else '✗'}"
+                    )
 
             if self._confirm_count >= self._confirm_bars:
                 if desired == 1:
@@ -114,6 +128,16 @@ class ERGAIndicator(BaseIndicator):
                 else:
                     signal_type = SignalType.FLIP_SHORT
                 self._confirm_count = 0
+                logger.info(
+                    f"{self.ticker} [{self.timeframe}]: *** SIGNAL CONFIRMED *** {signal_type.value} "
+                    f"| ss={self._erga.ss_line:.4f} | ER={self._erga.er:.2f} | quality={self._erga.quality:.1f}"
+                )
+            else:
+                logger.info(
+                    f"{self.ticker} [{self.timeframe}]: trend={trend_str} | no crossover "
+                    f"| ss={self._erga.ss_line:.4f} | ER={self._erga.er:.2f} "
+                    f"| quality={self._erga.quality:.1f}/{ self._erga.min_quality} {'✓' if quality_ok else '✗'}"
+                )
 
         if signal_type is None:
             return None

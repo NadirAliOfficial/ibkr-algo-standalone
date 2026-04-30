@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { QueryClient, QueryClientProvider, useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast, { Toaster } from "react-hot-toast";
-import { getTickers, addTicker, updateTicker, deleteTicker, bulkEdit, getPositions, getSignalLog, getTradeLog, getStatus, clearHalt, getEarningsLog, verifyAuth, saveCredentials, loadCredentials, clearCredentials, getMarket } from "./api";
+import { getTickers, addTicker, updateTicker, deleteTicker, bulkEdit, getPositions, getSignalLog, getTradeLog, getStatus, clearHalt, getEarningsLog, verifyAuth, saveCredentials, loadCredentials, clearCredentials, getMarket, getEngineLog } from "./api";
 
 const qc = new QueryClient();
 
@@ -394,17 +394,49 @@ function Heartbeat() {
   );
 }
 
+const LEVEL_COLORS = {
+  INFO:    "text-gray-300",
+  WARNING: "text-yellow-400",
+  ERROR:   "text-red-400",
+  DEBUG:   "text-gray-500",
+};
+
+function EngineLogPanel() {
+  const { data: lines = [] } = useQuery({ queryKey: ["enginelog"], queryFn: getEngineLog, refetchInterval: 5000 });
+  return (
+    <div className="font-mono text-xs bg-gray-900 rounded border border-gray-700 max-h-[520px] overflow-y-auto p-2 space-y-0.5">
+      {lines.length === 0 && <p className="text-gray-500 p-2">No engine logs yet</p>}
+      {lines.map((l, i) => {
+        const text = l.text || "";
+        const isSignal   = text.includes("SIGNAL CONFIRMED");
+        const isCross    = text.includes("crossover detected");
+        const isConfirm  = text.includes("confirming ");
+        const isNoXover  = text.includes("no crossover");
+        const isFetch    = text.includes("bars fetched");
+        let rowColor = LEVEL_COLORS[l.level] || "text-gray-300";
+        if (isSignal)  rowColor = "text-green-300 font-bold";
+        if (isCross)   rowColor = "text-blue-300";
+        if (isConfirm) rowColor = "text-cyan-400";
+        return (
+          <div key={i} className={`${rowColor} leading-5 ${isSignal ? "bg-green-900/30 px-1 rounded" : ""}`}>
+            {text}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function Logs() {
   const { data: signals = [] } = useQuery({ queryKey: ["signals"], queryFn: getSignalLog, refetchInterval: 10000 });
   const { data: trades = [] } = useQuery({ queryKey: ["trades"], queryFn: getTradeLog, refetchInterval: 10000 });
-  const { data: earnings = [] } = useQuery({ queryKey: ["earnings"], queryFn: getEarningsLog, refetchInterval: 30000 });
-  const [tab, setTab] = useState("signals");
+  const [tab, setTab] = useState("engine");
 
   return (
     <div className="p-4">
       <Heartbeat />
       <div className="flex gap-2 mb-3">
-        {["signals", "trades", "earnings"].map(t => (
+        {["engine", "signals", "trades"].map(t => (
           <button key={t} onClick={() => setTab(t)}
             className={`px-3 py-1 rounded text-xs ${tab === t ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white"}`}>
             {t.charAt(0).toUpperCase() + t.slice(1)}
@@ -412,8 +444,10 @@ function Logs() {
         ))}
       </div>
 
+      {tab === "engine" && <EngineLogPanel />}
+
       {tab === "signals" && (
-        <div className="space-y-1 max-h-96 overflow-y-auto">
+        <div className="space-y-1 max-h-[520px] overflow-y-auto">
           {signals.length === 0 && <p className="text-gray-500 text-sm">No signals yet</p>}
           {signals.map((s, i) => (
             <div key={i} className="text-xs bg-gray-800 rounded px-3 py-1.5 flex justify-between items-center">
@@ -431,7 +465,7 @@ function Logs() {
       )}
 
       {tab === "trades" && (
-        <div className="space-y-1 max-h-96 overflow-y-auto">
+        <div className="space-y-1 max-h-[520px] overflow-y-auto">
           {trades.length === 0 && <p className="text-gray-500 text-sm">No trades yet</p>}
           {trades.map((t, i) => (
             <div key={i} className="text-xs bg-gray-800 rounded px-3 py-1.5 flex justify-between items-center">
@@ -441,27 +475,6 @@ function Logs() {
                 <span className={t.signal === "flip_long" ? "text-green-400" : "text-red-400"}>{t.signal}</span>
               </span>
               <span className="text-gray-400">${t.dollar_amount} · {t.order_type}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {tab === "earnings" && (
-        <div className="space-y-1 max-h-96 overflow-y-auto">
-          {earnings.length === 0 && <p className="text-gray-500 text-sm">No earnings events</p>}
-          {earnings.map((e, i) => (
-            <div key={i} className="text-xs bg-gray-800 rounded px-3 py-1.5 flex justify-between items-center">
-              <span>
-                <span className="text-gray-400 mr-2">{e.timestamp?.slice(0, 10)}</span>
-                <span className="font-mono font-semibold mr-2">{e.ticker}</span>
-                <span className="text-yellow-400">{e.action}</span>
-                <span className="text-gray-400 ml-2">earnings: {e.earnings_date}</span>
-              </span>
-              {e.pnl !== 0 && (
-                <span className={e.pnl >= 0 ? "text-green-400" : "text-red-400"}>
-                  {e.pnl >= 0 ? "+" : ""}${e.pnl?.toFixed(2)}
-                </span>
-              )}
             </div>
           ))}
         </div>
