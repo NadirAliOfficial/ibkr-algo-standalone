@@ -403,8 +403,11 @@ const LEVEL_COLORS = {
 
 function EngineLogPanel() {
   const { data: lines = [] } = useQuery({ queryKey: ["enginelog"], queryFn: getEngineLog, refetchInterval: 5000 });
+  const topRef = useRef(null);
+  useEffect(() => { topRef.current?.scrollIntoView({ behavior: "smooth" }); }, [lines]);
   return (
     <div className="font-mono text-xs bg-gray-900 rounded border border-gray-700 max-h-[520px] overflow-y-auto p-2 space-y-0.5">
+      <div ref={topRef} />
       {lines.length === 0 && <p className="text-gray-500 p-2">No engine logs yet</p>}
       {lines.map((l, i) => {
         const text = l.text || "";
