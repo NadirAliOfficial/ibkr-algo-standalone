@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { QueryClient, QueryClientProvider, useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast, { Toaster } from "react-hot-toast";
-import { getTickers, addTicker, updateTicker, deleteTicker, bulkEdit, getPositions, getSignalLog, getTradeLog, getStatus, clearHalt, getEarningsLog, verifyAuth, saveCredentials, loadCredentials, clearCredentials } from "./api";
+import { getTickers, addTicker, updateTicker, deleteTicker, bulkEdit, getPositions, getSignalLog, getTradeLog, getStatus, clearHalt, getEarningsLog, verifyAuth, saveCredentials, loadCredentials, clearCredentials, getMarket } from "./api";
 
 const qc = new QueryClient();
 
@@ -71,35 +71,44 @@ const STATE_COLORS = { WAITING: "bg-gray-500", LONG: "bg-green-600", SHORT: "bg-
 function StatusBar() {
   const qclient = useQueryClient();
   const { data } = useQuery({ queryKey: ["status"], queryFn: getStatus, refetchInterval: 10000 });
+  const { data: mkt } = useQuery({ queryKey: ["market"], queryFn: getMarket, refetchInterval: 10000 });
   const haltMut = useMutation({
     mutationFn: clearHalt,
     onSuccess: (_, ticker) => { qclient.invalidateQueries(["status"]); toast.success(`Halt cleared: ${ticker}`); },
     onError: () => toast.error("Failed to clear halt"),
   });
-  if (!data) return null;
   return (
     <div className="flex gap-6 text-sm px-4 py-2 bg-gray-900 border-b border-gray-700 text-gray-300 flex-wrap items-center">
-      <span>Engine: <b className={data.engine_running ? "text-green-400" : "text-red-400"}>{data.engine_running ? "RUNNING" : "STOPPED"}</b></span>
-      <span>IBKR: <b className={data.ibkr_connected ? "text-green-400" : "text-red-400"}>{data.ibkr_connected ? "CONNECTED" : "DISCONNECTED"}</b></span>
-      <span>Mode: <b className={data.account_mode === "paper" ? "text-yellow-400" : "text-green-400"}>{(data.account_mode || "—").toUpperCase()}</b></span>
-      <span>Active: <b className="text-white">{data.active_tickers}</b></span>
-      {data.halted_tickers?.length > 0 && (
-        <span className="flex items-center gap-2 flex-wrap">
-          <span className="text-yellow-400">Halted:</span>
-          {data.halted_tickers.map(t => (
-            <span key={t} className="flex items-center gap-1">
-              <span className="text-yellow-300 font-mono">{t}</span>
-              <button
-                className="text-xs bg-yellow-700 hover:bg-yellow-600 text-white px-1.5 py-0.5 rounded"
-                onClick={() => haltMut.mutate(t)}
-              >clear</button>
-            </span>
-          ))}
+      {mkt && (
+        <span className="flex items-center gap-1.5">
+          <span className={`inline-block w-2 h-2 rounded-full ${mkt.market_open ? "bg-green-400" : "bg-red-500"}`} />
+          <b className={mkt.market_open ? "text-green-400" : "text-red-400"}>{mkt.market_open ? "MARKET OPEN" : "MARKET CLOSED"}</b>
+          <span className="text-gray-500 text-xs">{mkt.et_time} ET · {mkt.next_event} in {mkt.countdown}</span>
         </span>
       )}
-      {data.last_signal && (
-        <span className="text-gray-400">Last: <b className="text-white">{data.last_signal.ticker}</b> {data.last_signal.signal} — {data.last_signal.outcome}</span>
-      )}
+      {data && <>
+        <span>Engine: <b className={data.engine_running ? "text-green-400" : "text-red-400"}>{data.engine_running ? "RUNNING" : "STOPPED"}</b></span>
+        <span>IBKR: <b className={data.ibkr_connected ? "text-green-400" : "text-red-400"}>{data.ibkr_connected ? "CONNECTED" : "DISCONNECTED"}</b></span>
+        <span>Mode: <b className={data.account_mode === "paper" ? "text-yellow-400" : "text-green-400"}>{(data.account_mode || "—").toUpperCase()}</b></span>
+        <span>Active: <b className="text-white">{data.active_tickers}</b></span>
+        {data.halted_tickers?.length > 0 && (
+          <span className="flex items-center gap-2 flex-wrap">
+            <span className="text-yellow-400">Halted:</span>
+            {data.halted_tickers.map(t => (
+              <span key={t} className="flex items-center gap-1">
+                <span className="text-yellow-300 font-mono">{t}</span>
+                <button
+                  className="text-xs bg-yellow-700 hover:bg-yellow-600 text-white px-1.5 py-0.5 rounded"
+                  onClick={() => haltMut.mutate(t)}
+                >clear</button>
+              </span>
+            ))}
+          </span>
+        )}
+        {data.last_signal && (
+          <span className="text-gray-400">Last: <b className="text-white">{data.last_signal.ticker}</b> {data.last_signal.signal} — {data.last_signal.outcome}</span>
+        )}
+      </>}
     </div>
   );
 }
@@ -355,6 +364,36 @@ function PositionsPanel() {
   );
 }
 
+function Heartbeat() {
+  const [tick, setTick] = useState(0);
+  const [lastPing, setLastPing] = useState(null);
+  const { dataUpdatedAt } = useQuery({ queryKey: ["status"], queryFn: getStatus, refetchInterval: 10000 });
+
+  useEffect(() => {
+    const id = setInterval(() => setTick(t => t + 1), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    if (dataUpdatedAt) setLastPing(new Date(dataUpdatedAt));
+  }, [dataUpdatedAt]);
+
+  const secsSince = lastPing ? Math.floor((Date.now() - lastPing.getTime()) / 1000) : null;
+  const alive = secsSince !== null && secsSince < 30;
+
+  return (
+    <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+      <span className={`inline-block w-2 h-2 rounded-full ${alive ? "bg-green-400 animate-pulse" : "bg-gray-600"}`} />
+      <span className={alive ? "text-green-400" : "text-gray-500"}>
+        {alive ? "LIVE" : "CONNECTING..."}
+      </span>
+      {lastPing && (
+        <span className="text-gray-600">· last heartbeat {secsSince}s ago · {lastPing.toLocaleTimeString()}</span>
+      )}
+    </div>
+  );
+}
+
 function Logs() {
   const { data: signals = [] } = useQuery({ queryKey: ["signals"], queryFn: getSignalLog, refetchInterval: 10000 });
   const { data: trades = [] } = useQuery({ queryKey: ["trades"], queryFn: getTradeLog, refetchInterval: 10000 });
@@ -363,6 +402,7 @@ function Logs() {
 
   return (
     <div className="p-4">
+      <Heartbeat />
       <div className="flex gap-2 mb-3">
         {["signals", "trades", "earnings"].map(t => (
           <button key={t} onClick={() => setTab(t)}

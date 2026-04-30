@@ -208,9 +208,6 @@ class AlgoRunner:
             else:
                 return  # Skip cycle if reconnect failed
 
-        # Earnings daily scan — once per day, 09:35 ET
-        self._maybe_run_earnings_scan(now_et)
-
         if not _is_market_hours(now_et):
             return
 

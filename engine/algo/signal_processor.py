@@ -70,9 +70,6 @@ class SignalProcessor:
         if self.state.is_halted(ticker):
             return {**log, "outcome": "blocked", "reason": "halted — awaiting manual resolution"}
 
-        if not self.earnings.check_signal(ticker):
-            return {**log, "outcome": "blocked", "reason": "earnings within window"}
-
         current = self.state.get_state(ticker)
         target  = "long" if signal.signal_type == SignalType.FLIP_LONG else "short"
 
