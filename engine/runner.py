@@ -278,6 +278,7 @@ class AlgoRunner:
             logger.warning(f"{ticker}: no candles returned — skipping")
             return
 
+        logger.info(f"{ticker} [{tf}]: {len(candles)} bars fetched, evaluating")
         signal = ind.evaluate(candles)
 
         # Mark evaluated for this bar
