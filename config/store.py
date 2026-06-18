@@ -21,7 +21,7 @@ class ConfigStore:
 
     def _load(self):
         if os.path.exists(self.path):
-            with open(self.path) as f:
+            with open(self.path, encoding="utf-8") as f:
                 raw = json.load(f)
             self._data = {r["ticker"]: TickerConfig.from_dict(r) for r in raw}
             logger.info(f"Loaded {len(self._data)} tickers from {self.path}")
